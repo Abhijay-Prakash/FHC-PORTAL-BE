@@ -11,7 +11,7 @@ router.get('/registered', protectRoute, getRegisteredEvents);
 
 router.post('/addEvent',addEvent)
 router.post('/register', protectRoute,registerForEvent);    
-router.post('/attendance',markAttendanceForEvent);
+
 
 
 

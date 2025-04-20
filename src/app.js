@@ -3,10 +3,24 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 
+
+
 import byteRoutes from './routes/byteRoutes.js';
-import authRoutes from './routes/authRoutes.js';
 import eventRoutes from './routes/eventRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+
+import memberDashboardRoutes from './routes/dashboard/memberDashboardRoutes.js';
+import adminDashboardRoutes from './routes/dashboard/adminDashboardRoutes.js';
+
+import authRoutes from './routes/auth/authRoutes.js';
+import adminAuthRoutes from "./routes/auth/adminAuthRoutes.js";
+
+
+
+
+import byteAttendanceRoutes from "./routes/attendance/byteAttendanceRoutes.js";
+import eventAttendanceRoutes from "./routes/attendance/eventAttendanceRoutes.js";
+
 
 dotenv.config();
 
@@ -31,5 +45,12 @@ app.use('/api/byte', byteRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/users', userRoutes);
+app.use('/admin',adminAuthRoutes);
+app.use('/api/byte', byteAttendanceRoutes);
+app.use('/api/byte', byteAttendanceRoutes);
+app.use('/api/events', eventAttendanceRoutes);
+app.use('/api/dashboard',adminDashboardRoutes);
+app.use('/a',memberDashboardRoutes);
+
 
 export default app;

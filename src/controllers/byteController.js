@@ -55,71 +55,22 @@ export const registerForByteClass = async (req, res) => {
   
 
 
-
-
-export const markAttendance = async (req, res) => {
-    const {userId, domain, date, attended } = req.body;
-  
+export const getMyByteRegistration = async (req, res) => {
     try {
-
-      const registration = await ByteRegistration.findOne({ user: userId, domain });
+      const userId = req.user.id; // populated by authMiddleware
   
-      if (!registration) {
-        return res.status(404).json({ message: "Registration not found for this user and class" });
+      const registration = await ByteRegistration.findOne({ user: userId });
+  
+      if (registration) {
+        return res.status(200).json({
+          registered: true,
+          domain: registration.domain,
+        });
       }
   
-      const attendanceDate = new Date(date);
-      const existing = registration.attendance.find(
-        (record) => record.date.toISOString().slice(0, 10) === attendanceDate.toISOString().slice(0, 10)
-      );
-  
-      if (existing) {
-        existing.attended = attended;  
-      } else {
-       
-        registration.attendance.push({ date: attendanceDate, attended });
-      }
-  
-      
-      await registration.save();
-      res.status(200).json({ message: "Attendance marked successfully" });
-  
-    } catch (err) {
-      res.status(500).json({ message: err.message });
+      return res.status(200).json({ registered: false });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Server error' });
     }
   };
-  
-
-  export const getAttendanceByDate = async (req, res) => {
-    const { domain, date } = req.query; 
-    try {
-      const attendanceDate = new Date(date); 
-      
-      const registrations = await ByteRegistration.find({
-        domain: domain,
-        'attendance.date': attendanceDate
-      }).populate('user', 'name email');  
-  
-      if (!registrations.length) {
-        return res.status(404).json({ message: "No attendance found for this domain on the specified date" });
-      }
-  
-     
-      const filteredAttendance = registrations.map(registration => {
-        const attendanceRecord = registration.attendance.find(
-          record => record.date.toISOString().slice(0, 10) === attendanceDate.toISOString().slice(0, 10)
-        );
-        return {
-          userId: registration.user._id,
-          name: registration.user.name,
-          attended: attendanceRecord ? attendanceRecord.attended : false
-        };
-      });
-  
-      res.status(200).json(filteredAttendance);
-  
-    } catch (err) {
-      res.status(500).json({ message: err.message });
-    }
-  };
-  

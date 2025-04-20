@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
-import User from '../models/User.js';
-import generateMembershipId  from '../utils/idGenerator.js';
-import { generateAvatar } from '../utils/avatarGenerator.js';
-import generateTokenAndSetCookie from '../utils/generateToken.js';
+import User from '../../models/User.js';
+import generateMembershipId  from '../../utils/idGenerator.js';
+import { generateAvatar } from '../../utils/avatarGenerator.js';
+import generateTokenAndSetCookie from '../../utils/generateToken.js';
 
 //logout pending
 

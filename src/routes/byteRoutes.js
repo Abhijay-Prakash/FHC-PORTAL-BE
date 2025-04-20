@@ -1,17 +1,19 @@
 import express from 'express';
 import  protectRoute  from '../middleware/protectRoute.js';
-import {getAttendanceByDate, getParticipantsByDomain,markAttendance, registerForByteClass} from '../controllers/byteController.js';
+import { getParticipantsByDomain, registerForByteClass,getMyByteRegistration} from '../controllers/byteController.js';
 
 const router = express.Router();
 
 
 
 router.get('/participants', protectRoute, getParticipantsByDomain);
-router.get('/attendance',protectRoute,getAttendanceByDate);
+
+router.get('/my-registration', protectRoute, getMyByteRegistration);
 
 
-router.post('/mark-attendance',protectRoute, markAttendance);
 router.post('/register-byte',protectRoute,registerForByteClass);
+
+
 
 
 
