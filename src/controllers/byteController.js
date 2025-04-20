@@ -27,12 +27,12 @@ export const getParticipantsByDomain = async (req, res) => {
 
 
 export const registerForByteClass = async (req, res) => {
-    const { domain } = req.body;  // Only domain is needed for registration
-  
+    const { domain } = req.body;  
+
     try {
       const user = await User.findById(req.user._id);
   
-      // Check if the user is already registered for the given domain
+
       const existingRegistration = await ByteRegistration.findOne({ user, domain });
       if (existingRegistration) {
         return res.status(400).json({ message: 'User is already registered for this class' });
@@ -104,7 +104,7 @@ export const markAttendance = async (req, res) => {
         return res.status(404).json({ message: "No attendance found for this domain on the specified date" });
       }
   
-      // Filter attendance records by date and return those with their attendance status
+     
       const filteredAttendance = registrations.map(registration => {
         const attendanceRecord = registration.attendance.find(
           record => record.date.toISOString().slice(0, 10) === attendanceDate.toISOString().slice(0, 10)

@@ -7,7 +7,7 @@ const byteRegistrationSchema = new mongoose.Schema({
     required: true,
     enum: ['webdev', 'backend', 'react', 'ml'] 
   },
-  // New: store scheduled class dates
+  
   classDates: [{ type: Date }],
 
   attendance: [
@@ -18,7 +18,7 @@ const byteRegistrationSchema = new mongoose.Schema({
   ]
 });
 
-// New: compound index to prevent duplicate registrations per domain
+
 byteRegistrationSchema.index({ user: 1, domain: 1 }, { unique: true });
 
 export default mongoose.model('ByteRegistration', byteRegistrationSchema);

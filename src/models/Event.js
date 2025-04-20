@@ -15,15 +15,15 @@ const eventSchema = new mongoose.Schema({
     required: true
   },
   date: {
-    type: Date, // Use Date type instead of String
+    type: Date, // format->  "date": "2025-07-15T10:00:00Z",  
     required: true
   },
   time: {
-    type: String, // Store time as a string, or could be Date if you need to capture time as well
+    type: String, 
     required: true
   },
   location: {
-    type: String, // Location field for storing event venue
+    type: String, 
     required: true
   },
   attendees: {

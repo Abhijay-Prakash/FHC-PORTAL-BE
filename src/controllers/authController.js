@@ -4,6 +4,10 @@ import generateMembershipId  from '../utils/idGenerator.js';
 import { generateAvatar } from '../utils/avatarGenerator.js';
 import generateTokenAndSetCookie from '../utils/generateToken.js';
 
+//logout pending
+
+
+
 export const register = async (req, res) => {
   const { name, email, phone, password, gender, semester, class: userClass } = req.body;
 

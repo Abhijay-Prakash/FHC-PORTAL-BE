@@ -7,9 +7,11 @@ const router = express.Router();
 
 
 router.get('/participants', protectRoute, getParticipantsByDomain);
+router.get('/attendance',protectRoute,getAttendanceByDate);
+
+
 router.post('/mark-attendance',protectRoute, markAttendance);
 router.post('/register-byte',protectRoute,registerForByteClass);
-router.get('/attendance',protectRoute,getAttendanceByDate);
 
 
 
