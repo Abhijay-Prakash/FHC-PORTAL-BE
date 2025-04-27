@@ -28,7 +28,8 @@ const app = express();
 
 app.use(
     cors({
-      origin: "http://localhost:5173",
+      origin: ["http://localhost:5173",
+      "http://localhost:5174"],
       credentials: true,
       methods: ["GET", "POST", "PUT", "DELETE"],
       allowedHeaders: ["Content-Type", "Authorization"],
@@ -46,8 +47,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/users', userRoutes);
 app.use('/admin',adminAuthRoutes);
-app.use('/api/byte', byteAttendanceRoutes);
-app.use('/api/byte', byteAttendanceRoutes);
+app.use('/api/byte-attendace', byteAttendanceRoutes);
 app.use('/api/events', eventAttendanceRoutes);
 app.use('/api/dashboard',adminDashboardRoutes);
 app.use('/a',memberDashboardRoutes);

@@ -4,7 +4,7 @@ import protectRoute from '../middleware/protectRoute.js';
 const router = express.Router();
 
 router.get('/getEvents', getAllEvents);
-router.get('/getAllRegistrations',getAllRegistrations);
+router.post('/registrations',getAllRegistrations);
 router.get('/registered', protectRoute, getRegisteredEvents);
 
 

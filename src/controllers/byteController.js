@@ -2,25 +2,54 @@ import ByteRegistration from '../models/ByteRegistration.js';
 import User from '../models/User.js';
 
 
-
+//for admin-panel
 export const getParticipantsByDomain = async (req, res) => {
   const { domain } = req.query;
 
-  try {
-   
-    const participants = await ByteRegistration.find({ domain })
-      .populate("user", "name email");
+  if (!domain) {
+    return res.status(400).json({ message: 'Domain is required' });
+  }
 
-    if (!participants.length) {
-      return res.status(404).json({ message: "No participants found for this domain" });
+  try {
+    const participants = await ByteRegistration.find({ domain })
+      .populate('user', 'name email semester class');  
+
+    if (!participants || participants.length === 0) {
+      return res.status(404).json({ message: 'No participants found for this domain' });
     }
 
-    res.status(200).json(participants);
+    // Map over participants to structure the response as required
+    const formattedParticipants = participants.map(participant => ({
+      name: participant.user.name,
+      email: participant.user.email,
+      semester: participant.user.semester,
+      class: participant.user.class,
+    }));
 
+    res.status(200).json(formattedParticipants);
+  } catch (err) {
+    console.error('Error fetching participants:', err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+//for admin-panel
+export const getByteDashboardStats = async (req, res) => {
+  try {
+    const domains = ['webdev', 'backend', 'react', 'ml'];
+    const stats = {};
+
+    for (const domain of domains) {
+      const count = await ByteRegistration.countDocuments({ domain });
+      stats[domain] = count;
+    }
+
+    res.status(200).json(stats);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 
 

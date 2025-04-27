@@ -91,7 +91,7 @@ export const registerForEvent = async (req, res) => {
 
 
 export const getAllRegistrations = async (req, res) => {
-  const { eventId } = req.params; // Using params instead of body for eventId
+  const { eventId } = req.body; 
 
   if (!eventId) {
     return res.status(400).json({ message: 'Event ID is required' });
@@ -99,7 +99,7 @@ export const getAllRegistrations = async (req, res) => {
 
   try {
     const event = await Event.findById(eventId)
-      .populate('registeredUsers', 'name email')
+      .populate('registeredUsers', 'name email class semester')
       .populate('attendedUsers', 'name email');
 
     if (!event) {
