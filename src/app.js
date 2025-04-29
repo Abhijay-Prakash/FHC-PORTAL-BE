@@ -46,11 +46,14 @@ app.use('/api/byte', byteRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/users', userRoutes);
-app.use('/admin',adminAuthRoutes);
+
+
+
+app.use('/api/admin',adminAuthRoutes);
 app.use('/api/byte-attendace', byteAttendanceRoutes);
 app.use('/api/events', eventAttendanceRoutes);
 app.use('/api/dashboard',adminDashboardRoutes);
-app.use('/a',memberDashboardRoutes);
+app.use('/api',memberDashboardRoutes);
 
 
 export default app;
