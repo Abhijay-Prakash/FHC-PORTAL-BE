@@ -64,7 +64,7 @@ export const getRecentAttendance = async (req, res) => {
 
 export const getNewMembers = async (req, res) => {
   try {
-    const newMembers = await User.find({ role: { $in: ['member', 'execom'] } })
+    const newMembers = await User.find({ role: { $in: ['participant', 'execom'] } })
       .sort({ createdAt: -1 })
       .limit(5)
       .select('name email role profilePic createdAt');

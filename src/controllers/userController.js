@@ -24,3 +24,24 @@ export const getAllMembers = async (req, res) => {
     res.status(500).json({ message: 'Server error while fetching members' });
   }
 };
+
+
+//for admin 
+export const changeRole = async(req,res) =>{
+  const {id} = req.params;
+  const {newRole} = req.body;
+
+  if (!['admin', 'execom', 'member'].includes(newRole)) {
+    return res.status(400).json({ message: 'Invalid role' });
+  }
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(id, { role: newRole }, { new: true });
+    if (!updatedUser) return res.status(404).json({ message: 'User not found' });
+
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating role', error: err });
+  }
+
+};
