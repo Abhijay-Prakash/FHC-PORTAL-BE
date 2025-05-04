@@ -133,26 +133,3 @@ export const getRegisteredEvents = async (req, res) => {
 
 
 
-//should prolly move this to attendance module or something along with byte's attendance fn
-export const markAttendanceForEvent = async (req, res) => {
-  const { eventId, userId } = req.body;
-
-  if (!eventId || !userId) {
-    return res.status(400).json({ message: 'Event ID and User ID are required' });
-  }
-
-  try {
-  
-    await User.findByIdAndUpdate(userId, {
-      $addToSet: { eventsAttended: eventId }
-    });
-
-    await Event.findByIdAndUpdate(eventId, {
-      $addToSet: { attendedUsers: userId }
-    });
-
-    res.status(200).json({ message: 'Attendance marked successfully' });
-  } catch (err) {
-    res.status(500).json({ message: 'Internal server error' });
-  }
-};
