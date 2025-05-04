@@ -3,42 +3,8 @@ import User from '../models/User.js';
 
 
 
-
-export const addEvent = async (req, res) => {
-  try {
- 
-
-    const { title, description, category, date, time, location, capacity, tags } = req.body;
-
-  
-    const newEvent = new Event({
-      title,
-      description,
-      category,
-      date,
-      time,
-      location,
-      capacity,
-      tags
-    });
-
- 
-    await newEvent.save();
-
-    return res.status(201).json({
-      message: "Event created successfully",
-      event: newEvent
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      message: "Server error, event could not be created"
-    });
-  }
-};
-
-
-
+//general stuff
+//admin at the bottom
 export const getAllEvents = async (req, res) => {
   try {
     const events = await Event.find();
@@ -89,7 +55,6 @@ export const registerForEvent = async (req, res) => {
 };
 
 
-
 export const getAllRegistrations = async (req, res) => {
   const { eventId } = req.body; 
 
@@ -131,5 +96,41 @@ export const getRegisteredEvents = async (req, res) => {
   }
 };
 
+
+//admin features below this
+
+
+export const addEvent = async (req, res) => {
+  try {
+ 
+
+    const { title, description, category, date, time, location, capacity, tags } = req.body;
+
+  
+    const newEvent = new Event({
+      title,
+      description,
+      category,
+      date,
+      time,
+      location,
+      capacity,
+      tags
+    });
+
+ 
+    await newEvent.save();
+
+    return res.status(201).json({
+      message: "Event created successfully",
+      event: newEvent
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Server error, event could not be created"
+    });
+  }
+};
 
 
