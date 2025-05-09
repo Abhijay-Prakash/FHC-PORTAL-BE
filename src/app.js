@@ -56,4 +56,10 @@ app.use('/api/dashboard',adminDashboardRoutes);
 app.use('/api',memberDashboardRoutes);
 
 
+// for health monitoring
+app.get('/api/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
+
 export default app;
