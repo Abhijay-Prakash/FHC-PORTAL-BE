@@ -11,7 +11,7 @@ const generateTokenAndSetCookie = (userId, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'None',
-      maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
+      maxAge: 15 * 24 * 60 * 60 * 1000, 
     });
   };
   

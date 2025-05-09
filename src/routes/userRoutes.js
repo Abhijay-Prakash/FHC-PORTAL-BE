@@ -8,7 +8,7 @@ import { changeRole } from '../controllers/userController.js';
 
 const router = express.Router();
 
-router.get('/profile', protectRoute,getUserProfile);
+router.get('/profile',getUserProfile);
 router.get('/members', protectRoute,getAllMembers);
 router.patch('/:id/role',protectRoute,isAdmin, changeRole);
 
