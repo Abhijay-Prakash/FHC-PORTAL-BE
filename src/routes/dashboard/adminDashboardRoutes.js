@@ -12,8 +12,8 @@ import {
 const router = express.Router();
 
 // Protect route and check admin before accessing
-//router.use(protectRoute);
-//router.use(isAdmin);
+router.use(protectRoute);
+router.use(isAdmin);
 
 // Admin Dashboard Routes
 router.get('/stats', getAdminStats);
