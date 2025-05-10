@@ -24,7 +24,11 @@ import eventAttendanceRoutes from "./routes/attendance/eventAttendanceRoutes.js"
 
 dotenv.config();
 
+
+
 const app = express();
+app.set('trust proxy', 1);
+
 
 
 const allowedOrigins = process.env.NODE_ENV === 'production'
