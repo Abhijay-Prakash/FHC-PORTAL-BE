@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose"; // Import mongoose to use ObjectId
+import mongoose from "mongoose"; 
 
 
 const generateTokenAndSetCookie = (userId, res) => {
@@ -8,12 +8,13 @@ const generateTokenAndSetCookie = (userId, res) => {
     });
     console.log('Setting token for user:', userId);
 
-    res.cookie('jwt', token, {
+    res.cookie("jwt", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production' ,
-      sameSite: 'None',
-      maxAge: 15 * 24 * 60 * 60 * 1000, 
+      secure: process.env.NODE_ENV === "production", 
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", 
+      maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
     });
+    
 };
   
 export default generateTokenAndSetCookie;
