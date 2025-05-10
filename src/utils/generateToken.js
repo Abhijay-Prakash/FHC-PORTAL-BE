@@ -8,7 +8,7 @@ const generateTokenAndSetCookie = (userId, res) => {
     });
     console.log('Setting token for user:', userId);
 
-    res.cookie("jwt", token, {
+    res.cookie('jwt', token, {
       httpOnly: true,
       secure: true,
       sameSite: 'None',
