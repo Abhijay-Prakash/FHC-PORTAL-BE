@@ -13,6 +13,7 @@ const generateTokenAndSetCookie = (userId, res) => {
       secure: true,
       sameSite: 'None',
       maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
+      domain: 'https://fhc-admin-panel.vercel.app',
     });
     
 };
