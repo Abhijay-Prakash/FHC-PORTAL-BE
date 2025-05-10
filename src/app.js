@@ -31,12 +31,9 @@ const app = express();
 
 
 
-const allowedOrigins = process.env.NODE_ENV === 'production'
-  ? ["https://fhc-admin-panel.vercel.app"]
-  : ["http://localhost:5173", "http://localhost:5174"];
 app.use(
     cors({
-      origin: allowedOrigins,
+      origin: ["http://localhost:5173", "http://localhost:5174","https://fhc-admin-panel.vercel.app"],
       credentials: true,
       methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
       allowedHeaders: ["Content-Type", "Authorization"],
