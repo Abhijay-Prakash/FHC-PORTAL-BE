@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import User from '../../models/User.js';
 import generateMembershipId  from '../../utils/idGenerator.js';
 import { generateAvatar } from '../../utils/avatarGenerator.js';
-import generateTokenAndSetCookie from '../../utils/generateToken.js';
+import generateToken from '../../utils/generateToken.js';
 
 //logout pending
 
@@ -36,7 +36,12 @@ export const register = async (req, res) => {
     });
 
     await newUser.save();
-    generateTokenAndSetCookie(newUser._id, res);
+    const token = generateToken(newUser._id);
+
+    res.status(201).json({
+      message: 'User registered successfully',
+      token, // Send the token as part of the response
+    });
     res.status(201).json({ message: 'User registered successfully' });
 
   } catch (error) {
@@ -55,8 +60,18 @@ export const login = async (req, res) => {
     if(user.password!= password){
       return res.status(401).json({ message: 'Invalid credentials' });
     }
-    generateTokenAndSetCookie(user._id, res);
-    res.status(200).json({ message: 'Login successful', user });
+    const token = generateToken(user._id);
+
+    res.status(200).json({
+      message: 'Login successful',
+      token, // frontend will store this
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

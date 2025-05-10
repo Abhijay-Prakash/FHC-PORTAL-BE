@@ -1,20 +1,12 @@
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose"; 
 
-
-const generateTokenAndSetCookie = (userId, res) => {
-    const token = jwt.sign({ userId: userId.toString() }, process.env.JWT_SECRET, {
-      expiresIn: '15d',
-    });
-    console.log('Setting token for user:', userId);
-
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'None',
-      maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
-    });
-    
+// Function to generate and return a JWT token
+const generateToken = (userId) => {
+  const token = jwt.sign({ userId: userId.toString() }, process.env.JWT_SECRET, {
+    expiresIn: '15d', // Token expires in 15 days
+  });
+  console.log('Generated token for user:', userId);
+  return token; // Return the generated token
 };
-  
-export default generateTokenAndSetCookie;
+
+export default generateToken;
