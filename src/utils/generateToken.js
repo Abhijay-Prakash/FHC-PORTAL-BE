@@ -11,10 +11,8 @@ const generateTokenAndSetCookie = (userId, res) => {
     res.cookie("jwt", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "None",
+      sameSite: 'None',
       maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
-      signed: true,
-      domain: "https://fhc-admin-panel.vercel.app/"
     });
     
 };
