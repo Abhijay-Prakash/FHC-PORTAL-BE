@@ -28,8 +28,7 @@ const app = express();
 
 app.use(
     cors({
-      origin: ["http://localhost:5173","https://fhc-admin-panel.vercel.app",
-      "http://localhost:5174"],
+      origin: ["https://fhc-admin-panel.vercel.app"],
       credentials: true,
       methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
       allowedHeaders: ["Content-Type", "Authorization"],
