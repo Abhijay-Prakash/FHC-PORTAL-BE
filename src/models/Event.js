@@ -11,7 +11,7 @@ const eventSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ['BYTE', 'Event', 'Workshop', 'Talk', 'Meetup', 'Competition', 'Hackathon','Training'],
+    enum: ['BYTE', 'Event', 'Workshop', 'Talk', 'Meetup', 'Competition', 'Hackathon','Training','Seminar','Conference','Other'],
     required: true
   },
   date: {
