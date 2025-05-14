@@ -17,10 +17,14 @@ export async function generateCertificateBuffer({ name, event }) {
     height: 595,
   });
 
-  const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-  // Replace these with actual coordinates from Figma
-  const nameX = 270;
+  const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+  const fontSize = 32;
+
+
+  const nameWidth = font.widthOfTextAtSize(name, fontSize);
+  const certificateWidth = 842;
+  const nameX = (certificateWidth - nameWidth) / 2;
   const nameY = 595-320;
 
   page.drawText(name, {
