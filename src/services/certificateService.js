@@ -20,8 +20,8 @@ export async function generateCertificateBuffer({ name, event }) {
   const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
   // Replace these with actual coordinates from Figma
-  const nameX = 237;
-  const nameY = 595-350;
+  const nameX = 270;
+  const nameY = 595-320;
 
   page.drawText(name, {
     x: nameX,
