@@ -20,5 +20,4 @@ router.post('/register-byte',protectRoute,registerForByteClass);
 
 
 
-
 export default router;

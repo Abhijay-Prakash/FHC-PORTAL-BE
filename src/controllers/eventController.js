@@ -1,6 +1,6 @@
 import Event from '../models/Event.js';
 import User from '../models/User.js';
-
+import { sendRegistrationMail } from '../services/mailService.js';
 
 
 //general stuff
@@ -16,7 +16,9 @@ export const getAllEvents = async (req, res) => {
 
 export const registerForEvent = async (req, res) => {
   const { eventId } = req.body;
+
   const userId = req.user._id; 
+  const user = await User.findById(userId);
 
   if (!eventId) {
     return res.status(400).json({ message: 'Event ID is required' });
@@ -47,6 +49,8 @@ export const registerForEvent = async (req, res) => {
     await User.findByIdAndUpdate(userId, {
       $addToSet: { eventsRegistered: eventId }
     }, { new: true });
+
+    await sendRegistrationMail(user.email,user.name,event.title);
 
     res.status(200).json({ message: 'Registered for event successfully' });
   } catch (err) {

@@ -22,6 +22,7 @@ import byteAttendanceRoutes from "./routes/attendance/byteAttendanceRoutes.js";
 import eventAttendanceRoutes from "./routes/attendance/eventAttendanceRoutes.js";
 
 
+import certificateRoutes from "./routes/certificateRoutes.js";
 dotenv.config();
 
 
@@ -58,6 +59,9 @@ app.use('/api/byte-attendace', byteAttendanceRoutes);
 app.use('/api/events', eventAttendanceRoutes);
 app.use('/api/dashboard',adminDashboardRoutes);
 app.use('/api',memberDashboardRoutes);
+
+
+app.use('/api/certificate',certificateRoutes);
 
 
 // for health monitoring
