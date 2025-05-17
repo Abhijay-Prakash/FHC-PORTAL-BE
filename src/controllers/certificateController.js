@@ -4,14 +4,19 @@ import { sendCertificateEmail } from '../services/mailService.js';
 import Event from '../models/Event.js';
 export async function sendCertificate(req, res) {
   try {
-    const { name, email, event } = req.body;
+    const { name, email, eventId } = req.body;
 
-    const pdfBuffer = await generateCertificateBuffer({ name, event });
+    const event = await Event.findById(eventId);
+    if(!event){
+      return res.status(404).json({message:'Event not found'});
+    }
+    const eventName = event.title;
+    const pdfBuffer = await generateCertificateBuffer({ name, eventName });
 
     await sendCertificateEmail({
       to: email,
       name,
-      event,
+      eventName,
       pdfBuffer,
     });
 
