@@ -24,6 +24,7 @@ export const sendRegistrationMail = async (toEmail, name, eventName) => {
 };
 
 
+
 export async function sendCertificateEmail({ to, name, event, pdfBuffer }) {
   const mailOptions = {
     from: `"FISAT HORIZON" <${process.env.EMAIL_USER}>`,
