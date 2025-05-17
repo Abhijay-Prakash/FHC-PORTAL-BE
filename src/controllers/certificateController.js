@@ -2,9 +2,18 @@ import { error } from 'pdf-lib';
 import { generateCertificateBuffer } from '../services/certificateService.js';
 import { sendCertificateEmail } from '../services/mailService.js';
 import Event from '../models/Event.js';
+
+
+
+
+
 export async function sendCertificate(req, res) {
   try {
     const { name, email, eventId } = req.body;
+
+    if (!name || !email || !eventId) {
+      return res.status(400).json({ error: 'Missing required fields: name, email, and eventId are required.' });
+     }
 
     const event = await Event.findById(eventId);
     if(!event){
