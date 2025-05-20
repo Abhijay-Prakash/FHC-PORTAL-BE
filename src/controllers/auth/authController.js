@@ -40,7 +40,7 @@ export const register = async (req, res) => {
 
     res.status(201).json({
       message: 'User registered successfully',
-      token, // Send the token as part of the response
+      token, 
     });
     res.status(201).json({ message: 'User registered successfully' });
 
