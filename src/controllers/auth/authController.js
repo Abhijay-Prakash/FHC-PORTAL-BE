@@ -64,7 +64,7 @@ export const login = async (req, res) => {
 
     res.status(200).json({
       message: 'Login successful',
-      token, // frontend will store this
+      token, 
       user: {
         id: user._id,
         name: user.name,

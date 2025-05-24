@@ -1,6 +1,6 @@
 import Event from '../models/Event.js';
 import User from '../models/User.js';
-import { sendRegistrationMail } from '../services/mailService.js';
+import { sendRegistrationMail,sendMeetingMail } from '../services/mailService.js';
 
 
 //general stuff
@@ -51,6 +51,23 @@ export const registerForEvent = async (req, res) => {
     }, { new: true });
 
     await sendRegistrationMail(user.email,user.name,event.title);
+
+    if (event.category === 'Meeting') {
+      const meetingLink = 'https://meet.google.com/ajs-nkqq-bdw'; 
+
+      await sendMeetingMail({
+        to: user.email,
+        name: user.name,
+        event: event.title,
+        meetingLink,
+        date: event.date,
+        time: event.time,
+      });
+    }
+
+
+
+
 
     res.status(200).json({ message: 'Registered for event successfully' });
   } catch (err) {
