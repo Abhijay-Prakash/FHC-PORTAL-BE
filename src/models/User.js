@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
-
 const userSchema = new mongoose.Schema({
+
+  
   // Required fields at signup
   name: { type: String, required: true },
   email: { type: String, unique: true, required: true },
@@ -36,7 +37,7 @@ const userSchema = new mongoose.Schema({
     default: 'participant',
   },
   
-  // Optional profile completion fields
+  // Optional ....required for entering any project/teams 
   skills: [{
     type: String,
   }],
@@ -46,6 +47,9 @@ const userSchema = new mongoose.Schema({
   linkedinLink: {
     type: String,
   },  
+
+
+
   // Event tracking
   eventsAttended: [{ 
     type: mongoose.Schema.Types.ObjectId, 
@@ -59,7 +63,7 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Add helpful indexes
+
 userSchema.index({ eventsAttended: 1 });
 userSchema.index({ eventsRegistered: 1 });
 

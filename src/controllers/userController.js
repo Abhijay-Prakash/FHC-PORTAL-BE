@@ -1,4 +1,8 @@
+
 import User from '../models/User.js';
+//first half for users, second half for admin panel 
+
+
 
 
 //for profile page
@@ -11,9 +15,43 @@ export const getUserProfile = async (req, res) => {
   }
 };
 
+export const addSkills = async (req,res) => {
+  try{
+    const {skills} = req.body;
+
+    if(!Array.isArray(skills)){
+      return res.status(400).json({message: "SKills should be an array of strings"});
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {$addToSet: {skills: {$each : skills}}},
+      {new: true}
+    );
+
+    res.status(200).json({message: "Skills updated" ,user});
 
 
-//for admin panel
+  } catch(err){
+    res.status(500).json({message: err.message});
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//for admin 
 export const getAllMembers = async (req, res) => {
   try {
     const members = await User.find({ role: { $in: ['member', 'execom', 'participant', 'admin'] } })
@@ -26,7 +64,6 @@ export const getAllMembers = async (req, res) => {
 };
 
 
-//for admin 
 export const changeRole = async(req,res) =>{
   const {id} = req.params;
   const {newRole} = req.body;
