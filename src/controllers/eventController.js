@@ -171,3 +171,37 @@ export const getAllRegistrations = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+
+export const updateRegistrationStatus = async (req,res) => {
+  try{
+    const {eventId} = req.params;
+    const {status} = req.body;
+
+    const allowedStatuses = ['Upcoming', 'Open', 'Closed', 'Full', 'Completed', 'Cancelled'];
+     if (!allowedStatuses.includes(status)) {
+      return res.status(400).json({ message: 'Invalid registration status provided' });
+    }
+
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    event.registrationStatus = status;
+    await event.save();
+
+    res.status(200).json({
+      message: `Registration status updated to '${status}'`,
+      event,
+    });
+
+
+
+  }catch(err){
+    console.error('Error updating registration status',err.message);
+    res.status(500).json({message:'Internal server error'});
+  }
+
+};
