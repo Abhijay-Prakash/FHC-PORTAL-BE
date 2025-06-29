@@ -1,7 +1,11 @@
 import express from 'express';
-import { getAllEvents, registerForEvent,addEvent ,getAllRegistrations, getRegisteredEvents, updateRegistrationStatus} from '../controllers/eventController.js';
+
+import { getAllEvents, registerForEvent, getRegisteredEvents} from '../controllers/event/userEventController.js';
+import { addEvent,getAllRegistrations,updateRegistrationStatus } from '../controllers/event/adminEventController.js';
+
 import protectRoute from '../middleware/protectRoute.js';
 import { isAdmin } from '../middleware/isAdmin.js';
+
 const router = express.Router();
 
 
