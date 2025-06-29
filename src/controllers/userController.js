@@ -1,6 +1,9 @@
-
-import User from '../models/User.js';
+import User,{SKILLS_ENUM} from '../models/User.js';
 //first half for users, second half for admin panel 
+
+
+
+
 
 
 
@@ -15,31 +18,35 @@ export const getUserProfile = async (req, res) => {
   }
 };
 
-export const addSkills = async (req,res) => {
-  try{
-    const {skills} = req.body;
 
-    if(!Array.isArray(skills)){
-      return res.status(400).json({message: "SKills should be an array of strings"});
+
+
+export const addSkills = async (req, res) => {
+  try {
+    const { skills } = req.body;
+
+    if (!Array.isArray(skills)) {
+      return res.status(400).json({ message: "Skills should be an array of strings" });
+    }
+
+    const invalidSkills = skills.filter(skill => !SKILLS_ENUM.includes(skill));
+    if (invalidSkills.length > 0) {
+      return res.status(400).json({
+        message: `Invalid skills: ${invalidSkills.join(', ')}`
+      });
     }
 
     const user = await User.findByIdAndUpdate(
       req.user._id,
-      {$addToSet: {skills: {$each : skills}}},
-      {new: true}
+      { $addToSet: { skills: { $each: skills } } },
+      { new: true }
     );
 
-    res.status(200).json({message: "Skills updated" ,user});
-
-
-  } catch(err){
-    res.status(500).json({message: err.message});
+    res.status(200).json({ message: "Skills updated successfully", user });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
-}
-
-
-
-
+};
 
 
 

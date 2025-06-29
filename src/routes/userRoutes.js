@@ -17,7 +17,7 @@ router.patch('/addSkills',addSkills);
 
 //for admin only
 router.get('/members',isAdmin,getAllMembers);
-router.patch('/:id/role',protectRoute,isAdmin, changeRole);
+router.patch('/:id/role',isAdmin, changeRole);
 
 export default router;
 

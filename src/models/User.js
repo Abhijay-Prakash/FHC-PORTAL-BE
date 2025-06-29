@@ -1,4 +1,41 @@
 import mongoose from 'mongoose';
+
+export const SKILLS_ENUM = [
+  'HTML', 'CSS', 'Bootstrap', 'Tailwind CSS', 'Material UI', 'JavaScript', 'Angular', 'React',
+  'Node', 'Express', 'Java', 'Springboot', 'C', 'C++', 'Python', 'Django', 'Flask', 'FastAPI',
+  'MVC Architecture', 'Microservices',
+  'PostgreSQL', 'MongoDB', 'SQLite',
+  'Machine Learning', 'Neural Networks', 'LLMs', 'Numpy', 'Pandas', 'Scikit-Learn',
+  'OpenCv', 'TensorFlow', 'Keras', 'PyTorch', 'CNNs', 'YOLO',
+  'Matplotlib', 'Seaborn', 'EDA', 'Feature Engineering',
+  'Docker', 'Git', 'Github', 'Gitlab', 'CI/CD',
+  'AWS S3', 'Amazon SageMaker', 'AWS EC2 (GPU)', 'AWS Lambda',
+  'Amazon API Gateway', 'AWS Glue', 'AWS Step Functions',
+  'Amazon Kinesis', 'AWS IAM', 'Amazon CloudWatch',
+  'Amazon RDS', 'Amazon DynamoDB', 'Amazon Redshift',
+  'AWS CodePipeline', 'AWS CloudFormation',
+  'Amazon Lex', 'Amazon Rekognition', 'Amazon Comprehend',
+  'Amazon Forecast', 'Amazon Translate', 'Amazon Textract',
+  'Amazon EKS', 'Amazon ECS',
+  'Azure Blob Storage', 'Azure Machine Learning', 'Azure Virtual Machines (GPU)', 'Azure Functions',
+  'Azure API Management', 'Azure Data Factory', 'Azure Logic Apps', 'Azure Event Hubs',
+  'Azure Active Directory', 'Azure Monitor', 'Azure Log Analytics',
+  'Azure SQL Database', 'Azure Cosmos DB', 'Azure Synapse Analytics',
+  'Azure DevOps Pipelines', 'Azure Resource Manager (ARM)',
+  'Azure Bot Services', 'Azure Cognitive Services - Vision', 'Azure Cognitive Services - Language',
+  'Azure Time Series Insights', 'Azure Translator', 'Azure Form Recognizer',
+  'Azure Kubernetes Service (AKS)', 'Azure Container Instances (ACI)',
+  'Arduino', 'Raspberry Pi', 'ESP32', 'Embedded C', 'Microcontrollers',
+  'Sensor Interfacing', 'Serial Communication', 'I2C', 'SPI',
+  'Bluetooth Communication', 'WiFi Communication', 'LoRa', 'Zigbee',
+  'Basic Electronics', 'Circuit Design', 'PCB Design', 'Proteus Simulation', 'Fritzing',
+  'IoT', 'Motor Drivers', 'Servo Control', 'Line Following Algorithm', 'Obstacle Avoidance', 'PID Control'
+];
+
+
+
+
+
 const userSchema = new mongoose.Schema({
 
   
@@ -37,10 +74,18 @@ const userSchema = new mongoose.Schema({
     default: 'participant',
   },
   
-  // Optional ....required for entering any project/teams 
+  // Optional ....required for entering into any project/teams 
+
   skills: [{
-    type: String,
+  type: String,
+  enum: SKILLS_ENUM,
+  required: false
   }],
+
+
+
+
+
   githubLink: {
     type: String,
   },
@@ -50,7 +95,7 @@ const userSchema = new mongoose.Schema({
 
 
 
-  // Event tracking
+  // for event tracking
   eventsAttended: [{ 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Event' 
