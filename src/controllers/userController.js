@@ -50,7 +50,37 @@ export const addSkills = async (req, res) => {
 
 
 
+export const updateSocialLinks = async (req, res) => {
+  try {
+    const { githubLink, linkedinLink } = req.body;
 
+    
+    const urlRegex = /^https?:\/\/(www\.)?[a-zA-Z0-9./_-]+$/;
+    if (
+      (githubLink && !urlRegex.test(githubLink)) ||
+      (linkedinLink && !urlRegex.test(linkedinLink))
+    ) {
+      return res.status(400).json({ message: "Invalid URL format" });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        ...(githubLink && { githubLink }),
+        ...(linkedinLink && { linkedinLink }),
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: "Social links updated successfully",
+      user
+    });
+  } catch (error) {
+    console.error("Error updating social links:", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 
 
