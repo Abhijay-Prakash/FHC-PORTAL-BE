@@ -1,6 +1,6 @@
-import Event from '../models/Event.js';
-import User from '../models/User.js';
-import { sendRegistrationMail,sendMeetingMail } from '../services/mailService.js';
+import Event from '../../models/Event.js';
+import User from '../../models/User.js';
+import { sendRegistrationMail,sendMeetingMail } from '../../services/mailService.js';
 
 
 
