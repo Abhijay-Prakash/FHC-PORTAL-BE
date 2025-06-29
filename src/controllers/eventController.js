@@ -76,33 +76,6 @@ export const registerForEvent = async (req, res) => {
 };
 
 
-export const getAllRegistrations = async (req, res) => {
-  const { eventId } = req.body; 
-
-  if (!eventId) {
-    return res.status(400).json({ message: 'Event ID is required' });
-  }
-
-  try {
-    const event = await Event.findById(eventId)
-      .populate('registeredUsers', 'name email class semester')
-      .populate('attendedUsers', 'name email');
-
-    if (!event) {
-      return res.status(404).json({ message: 'Event not found' });
-    }
-
-    res.status(200).json({
-      eventId: event._id,
-      title: event.title,
-      date: event.date,
-      registeredUsers: event.registeredUsers,
-      attendedUsers: event.attendedUsers
-    });
-  } catch (err) {
-    res.status(500).json({ message: 'Internal server error' });
-  }
-};
 
 
 export const getRegisteredEvents = async (req, res) => {
@@ -155,3 +128,30 @@ export const addEvent = async (req, res) => {
 };
 
 
+export const getAllRegistrations = async (req, res) => {
+  const { eventId } = req.body; 
+
+  if (!eventId) {
+    return res.status(400).json({ message: 'Event ID is required' });
+  }
+
+  try {
+    const event = await Event.findById(eventId)
+      .populate('registeredUsers', 'name email class semester')
+      .populate('attendedUsers', 'name email');
+
+    if (!event) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    res.status(200).json({
+      eventId: event._id,
+      title: event.title,
+      date: event.date,
+      registeredUsers: event.registeredUsers,
+      attendedUsers: event.attendedUsers
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};

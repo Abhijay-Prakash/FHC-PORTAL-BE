@@ -38,6 +38,13 @@ const eventSchema = new mongoose.Schema({
   tags: [{
     type: String
   }],
+
+  registrationStatus: {
+    type: String,
+    enum: ['Upcoming','Open','Closed','Full','Completed','Cancelled'],
+    default:'Upcoming'
+  },
+
   registeredUsers: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
@@ -46,6 +53,8 @@ const eventSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   }]
+
+
 });
 
 eventSchema.index({ registeredUsers: 1 });
