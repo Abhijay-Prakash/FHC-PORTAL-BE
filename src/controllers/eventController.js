@@ -67,6 +67,8 @@ export const registerForEvent = async (req, res) => {
       $addToSet: { eventsRegistered: eventId }
     });
 
+    await sendRegistrationMail(user.email,user.name,event.title);
+
     
     if (event.category === 'Meeting') {
       const meetingLink = 'https://meet.google.com/ajs-nkqq-bdw'; 
