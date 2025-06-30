@@ -101,22 +101,15 @@ export const updateRegistrationStatus = async (req,res) => {
 };
 
 export const deleteEvent = async (req,res) => {
-
+  const {eventId} = req.params;
   try{
-    const {eventId} = req.params;
-
-    const event = await Event.findById(eventId);
-
+    const event = await Event.findByIdAndDelete(eventId);
     if(!event){
       return res.status(400).json({message: 'Event does not exist or invalid event ID'});
-    }
-
-    await event.remove();
-    
+    }    
     return res.status(200).json({message: 'Event deleted successfully'});
   }catch(err){
     console.error("Error deleting event",error);
     return res.status(500).json({message:'Internal server error while deleting event'});
   }
-
 };
