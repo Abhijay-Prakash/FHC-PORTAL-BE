@@ -30,7 +30,14 @@ export async function sendCertificateEmail({ to, name, event, pdfBuffer }) {
     from: `"FISAT HORIZON" <${process.env.EMAIL_USER}>`,
     to,
     subject: `Your Certificate for ${event}`,
-    text: `Hi ${name},\n\nThanks for participating in ${event}. Please find your certificate attached.`,
+    text: `Hi ${name},\n\nThank you for your valuable contribution as a volunteer for GENESIS 2025.
+
+We truly appreciate the time, effort, and enthusiasm you dedicated to making the event a success. Please find your certificate of appreciation attached to this email.
+
+Wishing you all the best in your future endeavors.
+
+Warm regards,  
+Team FISAT HORIZON`,
     attachments: [
       {
         filename: `${name}-${event}.pdf`,

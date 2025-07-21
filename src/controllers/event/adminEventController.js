@@ -6,11 +6,8 @@ import User from '../../models/User.js';
 
 export const addEvent = async (req, res) => {
   try {
- 
 
     const { title, description, category, date, time, location, capacity, tags } = req.body;
-
-  
     const newEvent = new Event({
       title,
       description,
@@ -29,12 +26,14 @@ export const addEvent = async (req, res) => {
       message: "Event created successfully",
       event: newEvent
     });
-  } catch (error) {
+    
+  }catch (error) {
     console.error(error);
     return res.status(500).json({
       message: "Server error, event could not be created"
     });
   }
+
 };
 
 
@@ -67,6 +66,8 @@ export const getAllRegistrations = async (req, res) => {
 };
 
 
+
+
 export const updateRegistrationStatus = async (req,res) => {
   try{
     const {eventId} = req.params;
@@ -91,14 +92,12 @@ export const updateRegistrationStatus = async (req,res) => {
       event,
     });
 
-
-
   }catch(err){
     console.error('Error updating registration status',err.message);
     res.status(500).json({message:'Internal server error'});
   }
-
 };
+
 
 export const deleteEvent = async (req,res) => {
   const {eventId} = req.params;
@@ -106,7 +105,17 @@ export const deleteEvent = async (req,res) => {
     const event = await Event.findByIdAndDelete(eventId);
     if(!event){
       return res.status(400).json({message: 'Event does not exist or invalid event ID'});
-    }    
+    }  
+    await User.updateMany(
+      {eventsRegistered: eventId},
+      { $pull: {eventsRegistered: eventId}}
+    );
+    
+    await User.updateMany(
+      { eventsAttended: eventId },
+      { $pull: { eventsAttended: eventId } }
+    );
+
     return res.status(200).json({message: 'Event deleted successfully'});
   }catch(err){
     console.error("Error deleting event",error);
