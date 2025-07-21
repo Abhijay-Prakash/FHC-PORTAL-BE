@@ -32,7 +32,7 @@ export async function generateCertificateBuffer({ name, event }) {
     y: nameY,
     size: 28,
     font,
-    color: rgba(255, 255, 255, 1),
+    color: rgb(255, 255, 255),
   });
 
   const pdfBytes = await pdfDoc.save();
