@@ -29,13 +29,15 @@ export async function sendCertificateEmail({ to, name, event, pdfBuffer }) {
   const mailOptions = {
     from: `"FISAT HORIZON" <${process.env.EMAIL_USER}>`,
     to,
-    subject: `Your Certificate for Volunteering at GENESIS 2025`,
+    subject: `Your Certificate for  participating in GENESIS 2025`,
     text: `Hi ${name},\n\n
-Thank you for your valuable contribution as a volunteer for GENESIS 2025.
+Thank you for participating in the Buildathon conducted as part of GENESIS 2025, organized by FISAT HORIZON.
 
-We truly appreciate the time, effort, and enthusiasm you dedicated to making the event a success. Please find your certificate of appreciation attached to this email.
+We appreciate the creativity, collaboration, and effort you brought to the event held on July 10 & 11, 2025, at FISAT. Your involvement played a key role in making the Buildathon an exciting and impactful experience.
 
-Wishing you all the best in your future endeavors.
+Please find your certificate of participation attached to this email.
+
+Wishing you continued success in all your future endeavors.
 
 Warm regards,  
 Team FISAT HORIZON`,
