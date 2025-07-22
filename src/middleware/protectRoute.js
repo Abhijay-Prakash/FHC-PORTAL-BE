@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 const protectRoute = async (req, res, next) => {
   try {
     
-    console.log("Authorization Header:", req.headers['authorization']);
+    //console.log("Authorization Header:", req.headers['authorization']);
 
     
     const token = req.headers['authorization']?.split(' ')[1]; 
@@ -22,7 +22,7 @@ const protectRoute = async (req, res, next) => {
       return res.status(401).json({ error: "Unauthorized - Invalid Token" });
     }
 
-    console.log('Decoded token:', decoded);
+    //console.log('Decoded token:', decoded);
 
    
     if (!mongoose.Types.ObjectId.isValid(decoded.userId)) {
