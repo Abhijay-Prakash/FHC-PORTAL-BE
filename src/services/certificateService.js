@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 
-const templatePath = path.resolve('templates', 'build_her.jpg');
+const templatePath = path.resolve('templates', 'volunteers_genesis.jpg');
 
 export async function generateCertificateBuffer({ name, event }) {
   const backgroundBytes = await fs.readFile(templatePath);
