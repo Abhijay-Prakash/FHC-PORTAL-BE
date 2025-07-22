@@ -42,7 +42,7 @@ Warm regards,
 Team FISAT HORIZON`,
     attachments: [
       {
-        filename: `${name}-${event}.pdf`,
+        filename: `${name}-BuildHerUp.pdf`,
         content: pdfBuffer,
         contentType: 'application/pdf',
       },
