@@ -43,7 +43,7 @@ Warm regards,
 Team FISAT HORIZON`,
     attachments: [
       {
-        filename: `${name}-Genesis JS.pdf`,
+        filename: `${name}-Genesis FE.pdf`,
         content: pdfBuffer,
         contentType: 'application/pdf',
       },
