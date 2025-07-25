@@ -34,19 +34,20 @@ export async function sendCertificateEmail({ to, name, event, pdfBuffer }) {
     to,
     subject: `Your Certificate for  participating in GENESIS 2025`,
     text: `Hi ${name},\n\n
-Thank you for participating in the Buildathon conducted as part of GENESIS 2025, organized by FISAT HORIZON.
+Thank you for being a part of GENESIS 2025, organized by FISAT HORIZON on July 10 & 11, 2025, at FISAT.
 
-We appreciate the creativity, collaboration, and effort you brought to the event held on July 10 & 11, 2025, at FISAT. Your involvement played a key role in making the Buildathon an exciting and impactful experience.
+We truly appreciate your enthusiastic participation and the energy you brought to the event. Your involvement helped create a vibrant atmosphere of innovation, learning, and collaboration that defined GENESIS 2025.
 
-Please find your certificate of participation attached to this email.
+Please find your Certificate of Participation attached to this email.
 
-Wishing you continued success in all your future endeavors.
+Wishing you all the best in your future endeavors.
+Keep learning, keep building!
 
 Warm regards,  
 Team FISAT HORIZON`,
     attachments: [
       {
-        filename: `${name}-Genesis FE.pdf`,
+        filename: `${name}-Genesis.pdf`,
         content: pdfBuffer,
         contentType: 'application/pdf',
       },
