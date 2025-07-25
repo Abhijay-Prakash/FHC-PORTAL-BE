@@ -12,6 +12,8 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+
+
 export const sendRegistrationMail = async (toEmail, name, eventName) => {
   const mailOptions = {
     from: `"FISAT HORIZON" <${process.env.EMAIL_USER}>`,
@@ -22,6 +24,7 @@ export const sendRegistrationMail = async (toEmail, name, eventName) => {
 
   await transporter.sendMail(mailOptions);
 };
+
 
 
 
@@ -52,6 +55,8 @@ Team FISAT HORIZON`,
 
   await transporter.sendMail(mailOptions);
 }
+
+
 
 export async function sendMeetingMail({ to, name, event, meetingLink, date, time }) {
   const formattedDate = new Date(date).toLocaleDateString('en-IN', {
