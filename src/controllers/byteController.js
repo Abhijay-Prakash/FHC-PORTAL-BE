@@ -58,7 +58,7 @@ export const getParticipantsByDomain = async (req, res) => {
       email: participant.user.email,
       semester: participant.user.semester,
       class: participant.user.class,
-      paymentVerified: participant.user.paymentVerified,
+      paymentVerified: participant.paymentVerified,
       userId: participant.user._id,
     }));
 
@@ -125,7 +125,7 @@ export const registerForByteClass = async (req, res) => {
 
 export const getMyByteRegistration = async (req, res) => {
     try {
-      const userId = req.user.id; // populated by authMiddleware
+      const userId = req.user.id; 
   
       const registration = await ByteRegistration.findOne({ user: userId });
   
@@ -133,6 +133,7 @@ export const getMyByteRegistration = async (req, res) => {
         return res.status(200).json({
           registered: true,
           domain: registration.domain,
+          paymentVerified: registration.paymentVerified,
         });
       }
   
