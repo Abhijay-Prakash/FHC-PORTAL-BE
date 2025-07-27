@@ -71,7 +71,8 @@ export const registerForByteClass = async (req, res) => {
       const byteRegistration = new ByteRegistration({
         user: user,
         domain,
-        attendance: []  
+        attendance: [] ,
+        paymentVerified: false,
       });
   
       await byteRegistration.save();
