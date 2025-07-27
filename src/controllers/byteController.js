@@ -69,7 +69,7 @@ export const getParticipantsByDomain = async (req, res) => {
 //for admin-panel
 export const getByteDashboardStats = async (req, res) => {
   try {
-    const domains = ['webdev', 'backend', 'react', 'ml'];
+    const domains = ['webdev', 'mern'];
     const stats = {};
 
     for (const domain of domains) {

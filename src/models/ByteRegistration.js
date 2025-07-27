@@ -5,7 +5,7 @@ const byteRegistrationSchema = new mongoose.Schema({
   domain: {
     type: String,
     required: true,
-    enum: ['webdev', 'mern', 'react', 'ml'] 
+    enum: ['webdev', 'mern'] 
   },
   
   classDates: [{ type: Date }],
