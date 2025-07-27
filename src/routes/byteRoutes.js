@@ -17,7 +17,7 @@ router.get('/my-registration', protectRoute, getMyByteRegistration);
 
 router.post('/register-byte',protectRoute,registerForByteClass);
 
-router.post('/verifyPayment', protectRoute,isAdmin, verifyPayment);
+router.post('/updatePaymentStatus', protectRoute,isAdmin, verifyPayment);
 
 
 export default router;

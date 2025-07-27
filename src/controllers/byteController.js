@@ -7,26 +7,29 @@ import User from '../models/User.js';
 
 export const verifyPayment = async (req, res) => {
 
-  const { userId } = req.body;
+  const { userId ,status} = req.body;
 
-  if (!userId) {
-    return res.status(400).json({ message: 'User ID is required' });
+  if (!userId || typeof status !== 'boolean') {
+    return res.status(400).json({ message: 'User ID and valid status (true/false) are required' });
   }
 
-  try{
+  try {
     const registration = await ByteRegistration.findOne({ user: userId });
 
     if (!registration) {
       return res.status(404).json({ message: 'Registration not found for this user' });
     }
 
-    registration.paymentVerified = true;
+    registration.paymentVerified = status;
     await registration.save();
 
-    res.status(200).json({ message: 'Payment verified successfully', registration });
-  }catch (err) {
+    res.status(200).json({
+      message: `Payment ${status ? 'verified' : 'unverified'} successfully`,
+      registration,
+    });
+  } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error while verifying payment' });
+    res.status(500).json({ message: 'Server error while updating payment status' });
   }
 
 };
@@ -55,6 +58,8 @@ export const getParticipantsByDomain = async (req, res) => {
       email: participant.user.email,
       semester: participant.user.semester,
       class: participant.user.class,
+      paymentVerified: participant.user.paymentVerified,
+      userId: participant.user._id,
     }));
 
     res.status(200).json(formattedParticipants);
