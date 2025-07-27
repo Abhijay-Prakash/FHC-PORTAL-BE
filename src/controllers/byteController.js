@@ -3,6 +3,37 @@ import User from '../models/User.js';
 
 
 //for admin-panel
+
+
+export const verifyPayment = async (req, res) => {
+
+  const { userId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ message: 'User ID is required' });
+  }
+
+  try{
+    const registration = await ByteRegistration.findOne({ user: userId });
+
+    if (!registration) {
+      return res.status(404).json({ message: 'Registration not found for this user' });
+    }
+
+    registration.paymentVerified = true;
+    await registration.save();
+
+    res.status(200).json({ message: 'Payment verified successfully', registration });
+  }catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error while verifying payment' });
+  }
+
+};
+
+
+
+//for admin-panel
 export const getParticipantsByDomain = async (req, res) => {
   const { domain } = req.query;
 
@@ -32,6 +63,8 @@ export const getParticipantsByDomain = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+
 
 //for admin-panel
 export const getByteDashboardStats = async (req, res) => {
