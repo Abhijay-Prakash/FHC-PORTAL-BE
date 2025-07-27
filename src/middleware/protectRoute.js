@@ -5,10 +5,7 @@ import mongoose from "mongoose";
 
 const protectRoute = async (req, res, next) => {
   try {
-    
     //console.log("Authorization Header:", req.headers['authorization']);
-
-    
     const token = req.headers['authorization']?.split(' ')[1]; 
 
     if (!token) {
