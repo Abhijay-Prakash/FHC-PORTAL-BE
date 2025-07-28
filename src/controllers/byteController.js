@@ -25,6 +25,8 @@ export const verifyPayment = async (req, res) => {
     registration.paymentVerified = status;
     await registration.save();
 
+    const whatsAppLink = 'set akkam later';
+    await sendBytePaymentConfirmationMail(registration.user.email, registration.user.name, whatsAppLink);
     res.status(200).json({
       message: `Payment ${status ? 'verified' : 'unverified'} successfully`,
       registration,
@@ -116,6 +118,9 @@ export const registerForByteClass = async (req, res) => {
       });
   
       await byteRegistration.save();
+  
+      await sendByteRegistrationMail(user.email, user.name);
+
       res.status(201).json({ message: 'User successfully registered for the BYTE class', byteRegistration });
   
     } catch (err) {
