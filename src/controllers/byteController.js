@@ -8,15 +8,14 @@ import { sendByteRegistrationMail,sendBytePaymentConfirmationMail } from '../ser
 
 
 export const verifyPayment = async (req, res) => {
-
-  const { userId ,status} = req.body;
+  const { userId, status } = req.body;
 
   if (!userId || typeof status !== 'boolean') {
     return res.status(400).json({ message: 'User ID and valid status (true/false) are required' });
   }
 
   try {
-    const registration = await ByteRegistration.findOne({ user: userId });
+    const registration = await ByteRegistration.findOne({ user: userId }).populate('user');
 
     if (!registration) {
       return res.status(404).json({ message: 'Registration not found for this user' });
@@ -25,18 +24,27 @@ export const verifyPayment = async (req, res) => {
     registration.paymentVerified = status;
     await registration.save();
 
-    const whatsAppLink = 'set akkam later';
-    await sendBytePaymentConfirmationMail(registration.user.email, registration.user.name, whatsAppLink);
+    
+    if (status) {
+      const whatsAppLink = 'set akkam later'; 
+      await sendBytePaymentConfirmationMail(
+        registration.user.email,
+        registration.user.name,
+        whatsAppLink,
+        registration.domain 
+      );
+    }
+
     res.status(200).json({
-      message: `Payment ${status ? 'verified' : 'unverified'} successfully`,
+      message: `Payment status updated successfully`,
       registration,
     });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error while updating payment status' });
   }
-
 };
+
 
 
 
