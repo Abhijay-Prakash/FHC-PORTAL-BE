@@ -75,3 +75,30 @@ export async function sendMeetingMail({ to, name, event, meetingLink, date, time
 
   await transporter.sendMail(mailOptions);
 }
+
+
+
+//byte stuff
+
+export const sendByteRegistrationMail = async (to, name) => {
+  const mailOptions = {
+    from: `"FISAT HORIZON" <${process.env.EMAIL_USER}>`,
+    to,
+    subject: `BYTE Class Registration Successful`,
+    text: `Hi ${name},\n\nYou're successfully registered for the BYTE classes.\n\nOnce your payment is verified by the admin, you will receive another email with the WhatsApp group link.\n\nThank you for joining us!\n\n- FISAT HORIZON`,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+
+export const sendBytePaymentConfirmationMail = async (to, name, whatsappLink) => {
+  const mailOptions = {
+    from: `"FISAT HORIZON" <${process.env.EMAIL_USER}>`,
+    to,
+    subject: `BYTE Payment Verified – WhatsApp Group Link Inside`,
+    text: `Hi ${name},\n\nYour payment for the BYTE class has been successfully verified.\n\nPlease join the official WhatsApp group to stay updated:\n${whatsappLink}\n\nWelcome aboard, and happy learning!\n\n- FISAT HORIZON`,
+  };
+
+  await transporter.sendMail(mailOptions);
+};

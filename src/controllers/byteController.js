@@ -1,6 +1,8 @@
 import ByteRegistration from '../models/ByteRegistration.js';
 import User from '../models/User.js';
 
+import { sendByteRegistrationMail,sendBytePaymentConfirmationMail } from '../services/mailService.js';
+
 
 //for admin-panel
 
