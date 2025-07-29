@@ -26,7 +26,7 @@ export const verifyPayment = async (req, res) => {
 
     
     if (status) {
-      const whatsAppLink = 'set akkam later'; 
+      const whatsAppLink = 'https://chat.whatsapp.com/EchqL1ZdoIk8jY2uCWRzGJ?mode=ac_t'; 
       await sendBytePaymentConfirmationMail(
         registration.user.email,
         registration.user.name,
@@ -136,7 +136,7 @@ export const registerForByteClass = async (req, res) => {
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
-  };
+};
   
 
 

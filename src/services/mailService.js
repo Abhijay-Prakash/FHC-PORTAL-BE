@@ -90,6 +90,7 @@ export const sendByteRegistrationMail = async (to, name) => {
 };
 
 
+
 export const sendBytePaymentConfirmationMail = async (to, name, whatsappLink) => {
   const mailOptions = {
     from: `"FISAT HORIZON" <${process.env.EMAIL_USER}>`,
