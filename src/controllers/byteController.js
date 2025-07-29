@@ -58,7 +58,8 @@ export const getParticipantsByDomain = async (req, res) => {
 
   try {
     const participants = await ByteRegistration.find({ domain })
-      .populate('user', 'name email semester class');  
+      .populate('user', 'name email phone semester class');
+
 
     if (!participants || participants.length === 0) {
       return res.status(404).json({ message: 'No participants found for this domain' });
@@ -68,6 +69,7 @@ export const getParticipantsByDomain = async (req, res) => {
     const formattedParticipants = participants.map(participant => ({
       name: participant.user.name,
       email: participant.user.email,
+      phone: participant.user.phone,
       semester: participant.user.semester,
       class: participant.user.class,
       paymentVerified: participant.paymentVerified,
