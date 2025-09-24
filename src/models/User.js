@@ -60,7 +60,7 @@ const userSchema = new mongoose.Schema({
   },
   class: {
     type: String,
-    enum: ['CSA','CSB','CSC','CSD','EC','EI','EE','ME','CE'],
+    enum: ['CSA','CSB','CSC','CSD','EC','EI','EE','ME','CE','IMCA'],
     required: true,
   },
   membershipId: { 
