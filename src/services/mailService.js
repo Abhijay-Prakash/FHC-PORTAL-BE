@@ -19,7 +19,19 @@ export const sendRegistrationMail = async (toEmail, name, eventName) => {
     from: `"FISAT HORIZON" <${process.env.EMAIL_USER}>`,
     to: toEmail,
     subject: `Successfully Registered for ${eventName}`,
-    text: `Hi ${name},\n\nYou're successfully registered for ${eventName}.\n\nStay tuned for more updates!\n\n- FISAT HORIZON`,
+    text: `Hi ${name},
+
+You're successfully registered for ${eventName}. We're excited to have you with us!
+
+📌 What to expect:
+- Event updates will be shared with you via this email.
+- Certificates of participation will be sent to this mail after the event.
+- Stay connected for resources, session recordings, and future opportunities.
+
+Looking forward to seeing you at ${eventName}!
+
+- Team FISAT HORIZON
+`,
   };
 
   await transporter.sendMail(mailOptions);
