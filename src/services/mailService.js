@@ -44,17 +44,18 @@ export async function sendCertificateEmail({ to, name, event, pdfBuffer }) {
   const mailOptions = {
     from: `"FISAT HORIZON" <${process.env.EMAIL_USER}>`,
     to,
-    subject: `Your Certificate for  participating in horizon.Hack() 2025`,
+    subject: `Your Certificate for  participating in ELEVATEX 2025`,
     text: `Hi ${name},\n\n
-Thank you for being a part of horizon.Hack( ), held as part of GENESIS 2025 and organized by FISAT HORIZON on July 10 & 11, 2025, at FISAT.
+Thank you for participating in **ELEVATE-X**, a fun and interactive Alumni Networking session organized by FISAT HORIZON on 24th September 2025.
 
-We truly appreciate your enthusiastic participation and the energy you brought to the event. Your involvement played a vital role in shaping the vibrant atmosphere of innovation, learning, and collaboration that defined GENESIS 2025.
+Through this session, you got to connect with alumni, share ideas, and explore **FISAT HORIZON** as a project-based learning club. Your enthusiastic participation contributed to the energy and excitement of the event!
 
-Please find your Certificate of Participation attached to this email.
+Please find your **Certificate of Participation** attached to this email.
 Keep learning, keep building!
 
 Warm regards,  
 Team FISAT HORIZON`,
+
     attachments: [
       {
         filename: `${name}-horizon.Hack().pdf`,

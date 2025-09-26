@@ -4,7 +4,7 @@ import generateMembershipId  from '../../utils/idGenerator.js';
 import { generateAvatar } from '../../utils/avatarGenerator.js';
 import generateToken from '../../utils/generateToken.js';
 
-//logout pending
+
 
 
 
@@ -20,10 +20,7 @@ export const register = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
-
     const profilePic = generateAvatar(name,gender)
-
-
     const newUser = new User({
       name,
       email,
@@ -44,7 +41,6 @@ export const register = async (req, res) => {
     
     });
   
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
