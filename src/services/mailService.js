@@ -1,116 +1,215 @@
-import nodemailer from "nodemailer";
+import Mailjet from "node-mailjet";
 import dotenv from "dotenv";
 
 dotenv.config();
 
+// Initialize Mailjet client
+const mailjet = Mailjet.apiConnect(
+  process.env.MAILJET_API_KEY,
+  process.env.MAILJET_API_SECRET
+);
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
-
-
+// ====================
+// Helper: Send Registration Mail
+// ====================
 export const sendRegistrationMail = async (toEmail, name, eventName) => {
-  const mailOptions = {
-    from: `"FISAT HORIZON" <${process.env.EMAIL_USER}>`,
-    to: toEmail,
-    subject: `Successfully Registered for ${eventName}`,
-    text: `Hi ${name},
+  try {
+    await mailjet.post("send", { version: "v3.1" }).request({
+      Messages: [
+        {
+          From: {
+            Email: process.env.MAILJET_SENDER_EMAIL,
+            Name: "FISAT HORIZON",
+          },
+          To: [
+            {
+              Email: toEmail,
+              Name: name,
+            },
+          ],
+          Subject: `Successfully Registered for ${eventName}`,
+          TextPart: `Hi ${name},
 
 You're successfully registered for ${eventName}. We're excited to have you with us!
 
 📌 What to expect:
-- Event updates will be shared with you via this email.
-- Certificates of participation will be sent to this mail after the event.
+- Event updates will be shared via this email.
+- Certificates of participation will be sent after the event.
 - Stay connected for resources, session recordings, and future opportunities.
 
 Looking forward to seeing you at ${eventName}!
 
-- Team FISAT HORIZON
-`,
-  };
-
-  await transporter.sendMail(mailOptions);
+- Team FISAT HORIZON`,
+        },
+      ],
+    });
+    console.log(`Registration email sent to ${toEmail}`);
+  } catch (err) {
+    console.error("Error sending registration email:", err);
+  }
 };
 
-
-
-
+// ====================
+// Helper: Send Certificate Email
+// ====================
 export async function sendCertificateEmail({ to, name, event, pdfBuffer }) {
-  const mailOptions = {
-    from: `"FISAT HORIZON" <${process.env.EMAIL_USER}>`,
-    to,
-    subject: `Your Certificate for  participating in ELEVATEX 2025`,
-    text: `Hi ${name},\n\n
-Thank you for participating in **ELEVATE-X**, a fun and interactive Alumni Networking session organized by FISAT HORIZON on 24th September 2025.
+  try {
+    await mailjet.post("send", { version: "v3.1" }).request({
+      Messages: [
+        {
+          From: {
+            Email: process.env.MAILJET_SENDER_EMAIL,
+            Name: "FISAT HORIZON",
+          },
+          To: [
+            {
+              Email: to,
+              Name: name,
+            },
+          ],
+          Subject: `Your Certificate for participating in ${event}`,
+          TextPart: `Hi ${name},
 
-Through this session, you got to connect with alumni, share ideas, and explore **FISAT HORIZON** as a project-based learning club. Your enthusiastic participation contributed to the energy and excitement of the event!
+Thank you for participating in ${event}. Your enthusiastic participation contributed to the energy and excitement of the event!
 
-Please find your **Certificate of Participation** attached to this email.
+Please find your Certificate of Participation attached.
+
 Keep learning, keep building!
 
-Warm regards,  
+Warm regards,
 Team FISAT HORIZON`,
-
-    attachments: [
-      {
-        filename: `${name}-horizon.Hack().pdf`,
-        content: pdfBuffer,
-        contentType: 'application/pdf',
-      },
-    ],
-  };
-
-  await transporter.sendMail(mailOptions);
+          Attachments: [
+            {
+              ContentType: "application/pdf",
+              Filename: `${name}-Certificate.pdf`,
+              Base64Content: pdfBuffer.toString("base64"),
+            },
+          ],
+        },
+      ],
+    });
+    console.log(`Certificate email sent to ${to}`);
+  } catch (err) {
+    console.error("Error sending certificate email:", err);
+  }
 }
 
-
-
+// ====================
+// Helper: Send Meeting Mail
+// ====================
 export async function sendMeetingMail({ to, name, event, meetingLink, date, time }) {
-  const formattedDate = new Date(date).toLocaleDateString('en-IN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+  const formattedDate = new Date(date).toLocaleDateString("en-IN", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 
-  const mailOptions = {
-    from: `"FISAT HORIZON" <${process.env.EMAIL_USER}>`,
-    to,
-    subject: `Meeting Link for ${event}`,
-    text: `Hi ${name},\n\nYou have successfully registered for the meeting "${event}".\n\n📅 Date: ${formattedDate}\n🕒 Time: ${time}\n🔗 Meeting Link: ${meetingLink}\n\nPlease be on time.\n\n- FISAT HORIZON`,
-  };
+  try {
+    await mailjet.post("send", { version: "v3.1" }).request({
+      Messages: [
+        {
+          From: {
+            Email: process.env.MAILJET_SENDER_EMAIL,
+            Name: "FISAT HORIZON",
+          },
+          To: [
+            {
+              Email: to,
+              Name: name,
+            },
+          ],
+          Subject: `Meeting Link for ${event}`,
+          TextPart: `Hi ${name},
 
-  await transporter.sendMail(mailOptions);
+You have successfully registered for the meeting "${event}".
+
+📅 Date: ${formattedDate}
+🕒 Time: ${time}
+🔗 Meeting Link: ${meetingLink}
+
+Please be on time.
+
+- FISAT HORIZON`,
+        },
+      ],
+    });
+    console.log(`Meeting email sent to ${to}`);
+  } catch (err) {
+    console.error("Error sending meeting email:", err);
+  }
 }
 
-
-
-//byte stuff
-
+// ====================
+// BYTE Classes: Registration Mail
+// ====================
 export const sendByteRegistrationMail = async (to, name) => {
-  const mailOptions = {
-    from: `"FISAT HORIZON" <${process.env.EMAIL_USER}>`,
-    to,
-    subject: `BYTE Class Registration Successful`,
-    text: `Hi ${name},\n\nYou're successfully registered for the BYTE classes.\n\nOnce your payment is verified by the admin, you will receive another email with the WhatsApp group link.\n\nThank you for joining us!\n\n- FISAT HORIZON`,
-  };
+  try {
+    await mailjet.post("send", { version: "v3.1" }).request({
+      Messages: [
+        {
+          From: {
+            Email: process.env.MAILJET_SENDER_EMAIL,
+            Name: "FISAT HORIZON",
+          },
+          To: [
+            {
+              Email: to,
+              Name: name,
+            },
+          ],
+          Subject: `BYTE Class Registration Successful`,
+          TextPart: `Hi ${name},
 
-  await transporter.sendMail(mailOptions);
+You're successfully registered for the BYTE classes.
+
+Once your payment is verified by the admin, you will receive another email with the WhatsApp group link.
+
+Thank you for joining us!
+
+- FISAT HORIZON`,
+        },
+      ],
+    });
+    console.log(`BYTE registration email sent to ${to}`);
+  } catch (err) {
+    console.error("Error sending BYTE registration email:", err);
+  }
 };
 
-
-
+// ====================
+// BYTE Classes: Payment Confirmation
+// ====================
 export const sendBytePaymentConfirmationMail = async (to, name, whatsappLink) => {
-  const mailOptions = {
-    from: `"FISAT HORIZON" <${process.env.EMAIL_USER}>`,
-    to,
-    subject: `BYTE Payment Verified – WhatsApp Group Link Inside`,
-    text: `Hi ${name},\n\nYour payment for the BYTE class has been successfully verified.\n\nPlease join the official WhatsApp group to stay updated:\n${whatsappLink}\n\nWelcome aboard, and happy learning!\n\n- FISAT HORIZON`,
-  };
+  try {
+    await mailjet.post("send", { version: "v3.1" }).request({
+      Messages: [
+        {
+          From: {
+            Email: process.env.MAILJET_SENDER_EMAIL,
+            Name: "FISAT HORIZON",
+          },
+          To: [
+            {
+              Email: to,
+              Name: name,
+            },
+          ],
+          Subject: `BYTE Payment Verified – WhatsApp Group Link Inside`,
+          TextPart: `Hi ${name},
 
-  await transporter.sendMail(mailOptions);
+Your payment for the BYTE class has been successfully verified.
+
+Please join the official WhatsApp group to stay updated:
+${whatsappLink}
+
+Welcome aboard, and happy learning!
+
+- FISAT HORIZON`,
+        },
+      ],
+    });
+    console.log(`BYTE payment confirmation email sent to ${to}`);
+  } catch (err) {
+    console.error("Error sending BYTE payment email:", err);
+  }
 };
