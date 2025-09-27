@@ -40,32 +40,37 @@ Looking forward to seeing you at ${eventName}!
 
 
 
-export async function sendCertificateEmail({ to, name, event, pdfBuffer }) {
+export async function sendCertificateEmail({ to, name, eventName,date,  pdfBuffer }) {
   const mailOptions = {
     from: `"FISAT HORIZON" <${process.env.EMAIL_USER}>`,
     to,
-    subject: `Your Certificate for  participating in ELEVATEX 2025`,
+    subject: `Your Certificate for participating in ${eventName}`,
     text: `Hi ${name},\n\n
-Thank you for participating in **ELEVATE-X**, a fun and interactive Alumni Networking session organized by FISAT HORIZON on 24th September 2025.
+Thank you for participating in **${eventName}**, an engaging and informative Tech Talk organized by FISAT HORIZON on 24th September 2025.
 
-Through this session, you got to connect with alumni, share ideas, and explore **FISAT HORIZON** as a project-based learning club. Your enthusiastic participation contributed to the energy and excitement of the event!
+During this session, you had the opportunity to learn from industry experts, explore emerging technologies, and gain valuable insights into the field. Your active participation contributed to the energy and excitement of the event!
 
 Please find your **Certificate of Participation** attached to this email.
-Keep learning, keep building!
+Keep learning, keep innovating!
 
-Warm regards,  
+Warm regards,
 Team FISAT HORIZON`,
 
     attachments: [
       {
-        filename: `${name}-horizon.Hack().pdf`,
+        filename: `${name}-Certificate.pdf`,
         content: pdfBuffer,
         contentType: 'application/pdf',
       },
     ],
   };
 
-  await transporter.sendMail(mailOptions);
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`Certificate email sent to ${to}`);
+  } catch (err) {
+    console.error(`Error sending certificate email to ${to}:`, err);
+  }
 }
 
 

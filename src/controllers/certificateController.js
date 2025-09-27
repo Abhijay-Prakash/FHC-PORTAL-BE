@@ -26,6 +26,7 @@ export async function sendCertificate(req, res) {
       to: email,
       name,
       eventName,
+      eventDate:event.date,
       pdfBuffer,
     });
 
