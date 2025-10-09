@@ -3,8 +3,6 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 
-
-
 import byteRoutes from './routes/byteRoutes.js';
 import eventRoutes from './routes/eventRoutes.js';
 import userRoutes from './routes/userRoutes.js';
@@ -32,14 +30,16 @@ const app = express();
 
 
 
-app.use(
+/*app.use(
     cors({
-      origin: ["http://localhost:5173", "http://localhost:5174","https://fhc-admin-panel.vercel.app","https://fhc-portal-frontend-9uxo.vercel.app","http://localhost:3000","https://fhc-portal-fe.vercel.app"],
+      origin: ["http://localhost:5173", "http://localhost:5174","https://fhc-admin-panel.vercel.app","https://fhc-portal-frontend-9uxo.vercel.app","http://localhost:3000","https://fhc-portal-fe.vercel.app","http://192.168.45.105:5000/"],
       credentials: true,
       methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
       allowedHeaders: ["Content-Type", "Authorization"],
     })
-  );
+  );*/
+
+  app.use(cors());
   
 
 app.use(express.json());
