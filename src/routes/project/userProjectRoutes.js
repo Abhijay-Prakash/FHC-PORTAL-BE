@@ -5,7 +5,7 @@ import {
   requestToJoin,
   getMyProjects,
 } from "../../controllers/project/userProjectController.js";
-import { verifyUser } from "../../middleware/protectRoute.js";
+import verifyUser from "../../middleware/protectRoute.js";
 
 const router = express.Router();
 
