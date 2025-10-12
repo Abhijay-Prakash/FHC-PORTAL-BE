@@ -21,6 +21,10 @@ import eventAttendanceRoutes from "./routes/attendance/eventAttendanceRoutes.js"
 
 
 import certificateRoutes from "./routes/certificateRoutes.js";
+
+import adminProjectRoutes from './routes/project/adminProjectRoutes.js';
+import userProjectRoutes from './routes/project/userProjectRoutes.js';
+
 dotenv.config();
 
 
@@ -60,6 +64,11 @@ app.use('/api',memberDashboardRoutes);
 
 
 app.use('/api/certificate',certificateRoutes);
+
+
+
+app.use('/api/projects/admin',adminProjectRoutes);
+app.use('/api/projects/user',userProjectRoutes);
 
 
 // for health monitoring
