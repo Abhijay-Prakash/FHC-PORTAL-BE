@@ -21,7 +21,7 @@ export const loginAdmin = async (req, res) => {
     const token = jwt.sign(
       { userId: admin._id, role: admin.role },
       process.env.JWT_SECRET,
-      { expiresIn: '1d' }
+      { expiresIn: '15d' }
     );
 
     res.cookie('jwt', token, {
@@ -31,7 +31,11 @@ export const loginAdmin = async (req, res) => {
       maxAge: 86400000,
     });
 
-    res.json({ message: 'Admin logged in successfully' });
+  
+    res.status(200).json({
+      message: 'Login successful',
+      token, 
+    });
 
   } catch (err) {
     console.error('Login error:', err);
