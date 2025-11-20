@@ -38,6 +38,12 @@ export async function sendCertificate(req, res) {
 }
 
 
+
+
+
+
+
+
 export async function sendCertificateToAll(req,res) {
   try{
     const {eventId} =  req.params;
