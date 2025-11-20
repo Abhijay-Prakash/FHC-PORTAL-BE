@@ -46,7 +46,7 @@ export const getAllRegistrations = async (req, res) => {
 
   try {
     const event = await Event.findById(eventId)
-      .populate('registeredUsers', 'name email class semester')
+      .populate('registeredUsers', 'name email class semester phone')
       .populate('attendedUsers', 'name email');
 
     if (!event) {

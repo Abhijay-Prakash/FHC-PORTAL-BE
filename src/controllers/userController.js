@@ -92,7 +92,7 @@ export const updateSocialLinks = async (req, res) => {
 export const getAllMembers = async (req, res) => {
   try {
     const members = await User.find({ role: { $in: ['member', 'execom', 'participant', 'admin'] } })
-      .select('name email role profilePic createdAt semester class'); // select extra fields
+      .select('name email role profilePic createdAt semester class  phone'); // select extra fields
     res.status(200).json(members);
   } catch (error) {
     console.error('Error fetching members:', error);
