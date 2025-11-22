@@ -7,19 +7,19 @@ import {
   getJoinRequests,
   respondToJoinRequest
 } from "../../controllers/project/userProjectController.js";
-import verifyUser from "../../middleware/protectRoute.js";
+import {protectRoute} from "../../middleware/protectRoute.js";
 
 
 const router = express.Router();
 
-router.post("/propose", verifyUser, proposeProject);
-router.get("/approved", getApprovedProjects);
-router.post("/join", verifyUser, requestToJoin);
-router.get("/my-projects", verifyUser, getMyProjects);
+router.post("/propose", protectRoute, proposeProject);
+router.get("/approved", protectRoute,getApprovedProjects);
+router.post("/join", protectRoute, requestToJoin);
+router.get("/my-projects", protectRoute, getMyProjects);
 
-router.get("/:projectId/requests", verifyUser, getJoinRequests);
+router.get("/:projectId/requests", protectRoute, getJoinRequests);
 
-router.put("/:projectId/requests/:requestId/respond", verifyUser, respondToJoinRequest);
+router.put("/:projectId/requests/:requestId/respond", protectRoute, respondToJoinRequest);
 
 
 export default router;
