@@ -1,5 +1,5 @@
 import express from 'express';
-import  protectRoute  from '../middleware/protectRoute.js';
+import  {protectRoute}  from '../middleware/protectRoute.js';
 import { getParticipantsByDomain, registerForByteClass,getMyByteRegistration,verifyPayment} from '../controllers/byteController.js';
 import { getByteDashboardStats } from '../controllers/byteController.js';
 import { isAdmin } from '../middleware/isAdmin.js';

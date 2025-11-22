@@ -1,6 +1,6 @@
 import express from 'express';
 import { sendCertificate,sendCertificateToAll } from '../controllers/certificateController.js';
-import protectRoute from '../middleware/protectRoute.js';
+import {protectRoute} from '../middleware/protectRoute.js';
 import { isAdmin } from '../middleware/isAdmin.js';
 
 const router = express.Router();
