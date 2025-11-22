@@ -13,6 +13,6 @@ const router = express.Router();
 router.get("/pending", verifyUser,isAdmin, getPendingProjects);
 router.put("/approve/:projectId", verifyUser,isAdmin, approveProject);
 router.put("/reject/:projectId", verifyUser,isAdmin, rejectProject);
-router.get("/all", isAdmin, verifyUser,getAllProjects);
+router.get("/all",  verifyUser,isAdmin.apply,getAllProjects);
 
 export default router;
