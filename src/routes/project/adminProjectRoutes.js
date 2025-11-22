@@ -13,6 +13,6 @@ const router = express.Router();
 router.get("/pending", protectRoute,isAdmin, getPendingProjects);
 router.put("/approve/:projectId", protectRoute,isAdmin, approveProject);
 router.put("/reject/:projectId", protectRoute,isAdmin, rejectProject);
-router.get("/all",  protectRoute,isAdmin.apply,getAllProjects);
+router.get("/all",  protectRoute,isAdmin,getAllProjects);
 
 export default router;
