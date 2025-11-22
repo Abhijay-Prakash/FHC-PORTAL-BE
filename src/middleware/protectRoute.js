@@ -3,7 +3,7 @@ import User from "../models/User.js";
 import mongoose from "mongoose"; 
 
 
-const protectRoute = async (req, res, next) => {
+export const protectRoute = async (req, res, next) => {
   try {
     //console.log("Authorization Header:", req.headers['authorization']);
     const token = req.headers['authorization']?.split(' ')[1]; 
@@ -41,4 +41,4 @@ const protectRoute = async (req, res, next) => {
   }
 };
 
-export default protectRoute;
+

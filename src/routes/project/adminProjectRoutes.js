@@ -6,13 +6,13 @@ import {
   getAllProjects,
 } from "../../controllers/project/adminProjectController.js";
 import { isAdmin } from "../../middleware/isAdmin.js";
-import verifyUser from "../../middleware/protectRoute.js";
+import {protectRoute} from "../../middleware/protectRoute.js";
 
 const router = express.Router();
 
-router.get("/pending", verifyUser,isAdmin, getPendingProjects);
-router.put("/approve/:projectId", verifyUser,isAdmin, approveProject);
-router.put("/reject/:projectId", verifyUser,isAdmin, rejectProject);
-router.get("/all",  verifyUser,isAdmin.apply,getAllProjects);
+router.get("/pending", protectRoute,isAdmin, getPendingProjects);
+router.put("/approve/:projectId", protectRoute,isAdmin, approveProject);
+router.put("/reject/:projectId", protectRoute,isAdmin, rejectProject);
+router.get("/all",  protectRoute,isAdmin.apply,getAllProjects);
 
 export default router;
