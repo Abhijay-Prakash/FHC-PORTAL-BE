@@ -34,7 +34,7 @@ export const addSkills = async (req, res) => {
 
     const user = await User.findByIdAndUpdate(
       req.user._id,
-      { $addToSet: { skills: { $each: skills } } },
+      { skills},
       { new: true }
     );
 
