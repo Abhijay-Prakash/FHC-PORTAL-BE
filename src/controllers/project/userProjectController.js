@@ -91,7 +91,7 @@ export const getProjectsAsTeamMember = async (req, res) => {
       teamMembers: req.user._id,
       owner: { $ne: req.user._id },
     })
-      .populate("owner", "name class semester skills")
+      .populate("owner", "name class semester skills profilePic")
       .populate("teamMembers", "name class semester skills profilePic");
 
     res.status(200).json(projects);
