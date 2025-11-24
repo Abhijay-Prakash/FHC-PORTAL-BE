@@ -76,6 +76,7 @@ export const requestToJoin = async (req, res) => {
 export const getMyProjects = async (req, res) => {
   try {
     const projects = await Project.find({ owner: req.user._id })
+      .populate("owner","name profilePic")
       .populate("teamMembers", "name class semester skills profilePic");
     res.status(200).json(projects);
   } catch (error) {
