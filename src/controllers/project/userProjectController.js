@@ -25,6 +25,8 @@ export const proposeProject = async (req, res) => {
 };
 
 
+
+
 export const getApprovedProjects = async (req, res) => {
   try {
     const projects = await Project.find({ status: "approved" })
@@ -35,6 +37,13 @@ export const getApprovedProjects = async (req, res) => {
     res.status(500).json({ message: "Error fetching projects", error });
   }
 };
+
+
+
+
+
+
+
 
 
 export const requestToJoin = async (req, res) => {
@@ -61,15 +70,29 @@ export const requestToJoin = async (req, res) => {
 };
 
 
+
+
+
 export const getMyProjects = async (req, res) => {
   try {
-    const projects = await Project.find({ owner: req.user._id })
-      .populate("teamMembers", "name class semester skills");
+    const userId = req.user._id;
+
+    const projects = await Project.find({
+      $or: [
+        { owner: userId }, 
+        { teamMembers: userId },
+      ],
+    })
+      .populate("teamMembers", "name class semester skills")
+      .populate("owner", "name email"); // (optional)
+
     res.status(200).json(projects);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching your projects", error });
-  }
+    console.error("getMyProjects error:", error);
+    res.status(500).json({ message: "Error fetching your projects", error });
+  }
 };
+
 
 
 
