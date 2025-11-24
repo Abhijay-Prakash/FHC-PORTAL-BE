@@ -30,7 +30,7 @@ export const proposeProject = async (req, res) => {
 export const getApprovedProjects = async (req, res) => {
   try {
     const projects = await Project.find({ status: "approved" })
-      .populate("owner", "name class semester")
+      .populate("owner", "name class semester profilePic")
       .populate("teamMembers", "name class semester skills profilePic");
     res.status(200).json(projects);
   } catch (error) {
