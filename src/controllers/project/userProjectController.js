@@ -75,23 +75,30 @@ export const requestToJoin = async (req, res) => {
 
 export const getMyProjects = async (req, res) => {
   try {
-    const userId = req.user._id;
+    const projects = await Project.find({ owner: req.user._id })
+      .populate("teamMembers", "name class semester skills");
+    res.status(200).json(projects);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching your projects", error });
+  }
+};
 
+
+export const getProjectsAsTeamMember = async (req, res) => {
+  try {
     const projects = await Project.find({
-      $or: [
-        { owner: userId }, 
-        { teamMembers: userId },
-      ],
+      teamMembers: req.user._id,
+      owner: { $ne: req.user._id },
     })
-      .populate("teamMembers", "name class semester skills")
-      .populate("owner", "name email"); // (optional)
+      .populate("owner", "name class semester skills")
+      .populate("teamMembers", "name class semester skills");
 
     res.status(200).json(projects);
   } catch (error) {
-    console.error("getMyProjects error:", error);
-    res.status(500).json({ message: "Error fetching your projects", error });
-  }
+    res.status(500).json({ message: "Error fetching team member projects", error });
+  }
 };
+
 
 
 
