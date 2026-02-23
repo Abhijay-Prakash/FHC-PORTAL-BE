@@ -2,14 +2,14 @@ import fs from 'fs/promises';
 import path from 'path';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 
-const templatePath = path.resolve('templates', 'elevateVolunteer.jpg');
+const templatePath = path.resolve('templates', 'exodex_1.png');
 
 export async function generateCertificateBuffer({ name, event }) {
   const backgroundBytes = await fs.readFile(templatePath);
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([842, 595]); // A4 landscape in pts
 
-  const backgroundImage = await pdfDoc.embedJpg(backgroundBytes);
+  const backgroundImage = await pdfDoc.embedPng(backgroundBytes);
   page.drawImage(backgroundImage, {
     x: 0,
     y: 0,

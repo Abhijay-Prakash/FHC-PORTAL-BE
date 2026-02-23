@@ -49,16 +49,15 @@ export async function sendCertificateEmail({ to, name, eventName,date,  pdfBuffe
   const mailOptions = {
     from: `"FISAT HORIZON" <${process.env.EMAIL_USER}>`,
     to,
-    subject: `Your Certificate for Volunteering  in Elevate-X`,
+    subject: `Your Certificate for Participating  in EXODEX`,
     text: `Hi ${name},\n\n
-Thank you for actively volunteering in Elevate-X, organized by FISAT HORIZON on 24th September 2025.
+Your enthusiastic participation and active involvement added great value to the event and contributed to its overall success. We truly appreciate your interest, energy, and willingness to engage in the experience.
 
-Your dedication and support in coordinating and managing the event played a key role in its smooth execution. We truly appreciate the time, effort, and enthusiasm you contributed to making the program a success.
+Please find your Certificate of Participation attached to this email.
 
-Please find your Certificate of Volunteering attached to this email.
-Keep growing, keep inspiring!
+Keep exploring, keep building, and keep pushing your limits!
 
-We look forward to working with you again in our future events.
+We look forward to seeing you in our upcoming initiatives.
 
 Warm regards,
 Team FISAT HORIZON`,
