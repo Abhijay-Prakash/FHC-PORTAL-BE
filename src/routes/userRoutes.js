@@ -2,7 +2,7 @@ import express from 'express';
 
 import {protectRoute} from '../middleware/protectRoute.js';
 import { isAdmin } from '../middleware/isAdmin.js';
-import { getAllMembers, getAllAlumni, changeRole, getUserGrowth } from '../controllers/user/adminUserController.js'
+import { getAllMembers, getAllAlumni, updateUserTags, changeRole, getUserGrowth } from '../controllers/user/adminUserController.js'
 
 import { addSkills,getUserProfile,updateSocialLinks } from '../controllers/user/userController.js';
 
@@ -20,6 +20,7 @@ router.patch('/updateSocialLinks',updateSocialLinks);
 router.get('/members',isAdmin,getAllMembers);
 router.get('/alumni',isAdmin,getAllAlumni);
 router.get('/members/growth',isAdmin,getUserGrowth);
+router.patch('/:id/tags',isAdmin,updateUserTags);
 router.patch('/:id/role',isAdmin, changeRole);
 
 

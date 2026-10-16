@@ -70,6 +70,11 @@ const userSchema = new mongoose.Schema({
       message: 'Passout year is outside the supported range.',
     },
   },
+  tags: [{
+    type: String,
+    trim: true,
+    maxlength: 40,
+  }],
   class: {
     type: String,
     enum: ['CSA','CSB','CSC','CSD','EC','EI','EE','ME','CE','IMCA'],
