@@ -3,11 +3,11 @@ import path from 'path';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 
 const templatePath = path.resolve('templates', 'exodex_1.png');
-
+//chummanpn
 export async function generateCertificateBuffer({ name, event }) {
   const backgroundBytes = await fs.readFile(templatePath);
   const pdfDoc = await PDFDocument.create();
-  const page = pdfDoc.addPage([842, 595]); // A4 landscape in pts
+  const page = pdfDoc.addPage([842, 595]); 
 
   const backgroundImage = await pdfDoc.embedPng(backgroundBytes);
   page.drawImage(backgroundImage, {

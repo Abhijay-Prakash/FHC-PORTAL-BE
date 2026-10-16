@@ -14,6 +14,19 @@ export const getAllMembers = async (req, res) => {
   }
 };
 
+export const getAllAlumni = async (req, res) => {
+  try {
+    const alumni = await User.find({ isAlumni: true })
+      .select('name email role profilePic createdAt passoutYear class phone')
+      .sort({ passoutYear: -1, name: 1 });
+
+    res.status(200).json(alumni);
+  } catch (error) {
+    console.error('Error fetching alumni:', error);
+    res.status(500).json({ message: 'Server error while fetching alumni' });
+  }
+};
+
 
 export const changeRole = async(req,res) =>{
   const {id} = req.params;

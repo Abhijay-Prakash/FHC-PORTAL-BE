@@ -64,7 +64,7 @@ Team FISAT HORIZON`,
 
     attachments: [
       {
-        filename: `${name}-Certificate.pdf`,
+        filename: `${name}-Workshop_Certificate.pdf`,
         content: pdfBuffer,
         contentType: 'application/pdf',
       },

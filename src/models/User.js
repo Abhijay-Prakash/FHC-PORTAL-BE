@@ -54,9 +54,21 @@ const userSchema = new mongoose.Schema({
   },
   semester: {
     type: Number,
-    required: true,
+    required: function () { return !this.isAlumni; },
     min: 1,
     max: 8
+  },
+  isAlumni: {
+    type: Boolean,
+    default: false,
+  },
+  passoutYear: {
+    type: Number,
+    min: 1900,
+    validate: {
+      validator: function (year) { return year == null || year <= new Date().getFullYear() + 10; },
+      message: 'Passout year is outside the supported range.',
+    },
   },
   class: {
     type: String,
