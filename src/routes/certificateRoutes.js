@@ -3,8 +3,10 @@ import { sendCertificate,sendCertificateToAll } from '../controllers/certificate
 import {
   deleteCertificateTemplate,
   getCertificateTemplateImage,
+  listCertificateDeliveries,
   listCertificateTemplates,
   previewCertificateTemplate,
+  retryFailedCertificateDeliveries,
   sendUsingCertificateTemplate,
   updateCertificateTemplateRecipients,
   updateCertificateTemplateSettings,
@@ -23,8 +25,10 @@ router.get('/templates/:eventId', listCertificateTemplates);
 router.post('/templates/:eventId', express.raw({ type: ['image/png', 'image/jpeg'], limit: '5mb' }), uploadCertificateTemplate);
 router.patch('/templates/:templateId/recipients', updateCertificateTemplateRecipients);
 router.patch('/templates/:templateId/settings', updateCertificateTemplateSettings);
+router.get('/templates/:templateId/deliveries', listCertificateDeliveries);
 router.get('/templates/:templateId/image', getCertificateTemplateImage);
 router.get('/templates/:templateId/preview', previewCertificateTemplate);
 router.post('/templates/:templateId/send', sendUsingCertificateTemplate);
+router.post('/templates/:templateId/retry-failed', retryFailedCertificateDeliveries);
 router.delete('/templates/:templateId', deleteCertificateTemplate);
 export default router;

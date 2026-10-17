@@ -2,6 +2,7 @@ import { error } from 'pdf-lib';
 import Event from '../../models/Event.js';
 import User from '../../models/User.js';
 import CertificateTemplate from '../../models/CertificateTemplate.js';
+import CertificateDelivery from '../../models/CertificateDelivery.js';
 
 
 
@@ -108,6 +109,7 @@ export const deleteEvent = async (req,res) => {
       return res.status(400).json({message: 'Event does not exist or invalid event ID'});
     }  
     await CertificateTemplate.deleteMany({ event: eventId });
+    await CertificateDelivery.deleteMany({ event: eventId });
     await User.updateMany(
       {eventsRegistered: eventId},
       { $pull: {eventsRegistered: eventId}}

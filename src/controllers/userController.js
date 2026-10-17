@@ -5,7 +5,9 @@ import User,{SKILLS_ENUM} from '../models/User.js';
 //for profile page
 export const getUserProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).populate('eventsAttended');
+    const user = await User.findById(req.user._id)
+      .select('-password')
+      .populate('eventsAttended');
     res.json(user);
   } catch (err) {
     res.status(500).json({ message: err.message });

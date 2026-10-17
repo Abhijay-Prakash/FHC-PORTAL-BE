@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import Event from '../models/Event.js';
 import User from '../models/User.js';
 import CertificateTemplate from '../models/CertificateTemplate.js';
+import CertificateDelivery from '../models/CertificateDelivery.js';
 import { generateCertificateFromTemplate } from '../services/certificateService.js';
 import { sendCertificateEmail } from '../services/mailService.js';
 
@@ -205,6 +206,7 @@ export async function deleteCertificateTemplate(req, res) {
     if (!validId(templateId)) return res.status(400).json({ message: 'Invalid template ID.' });
     const template = await CertificateTemplate.findByIdAndDelete(templateId);
     if (!template) return res.status(404).json({ message: 'Certificate template not found.' });
+    await CertificateDelivery.deleteMany({ template: templateId });
     return res.json({ message: 'Certificate template deleted.' });
   } catch (error) {
     console.error('Failed to delete certificate template:', error);
@@ -212,7 +214,7 @@ export async function deleteCertificateTemplate(req, res) {
   }
 }
 
-export async function sendUsingCertificateTemplate(req, res) {
+async function processCertificateDeliveries(req, res, mode) {
   try {
     const { templateId } = req.params;
     if (!validId(templateId)) return res.status(400).json({ message: 'Invalid template ID.' });
@@ -224,9 +226,55 @@ export async function sendUsingCertificateTemplate(req, res) {
       return res.status(400).json({ message: 'Select at least one recipient before sending.' });
     }
 
+    const staleSendingCutoff = new Date(Date.now() - 15 * 60 * 1000);
+    await CertificateDelivery.updateMany(
+      { template: templateId, status: 'sending', lastAttemptAt: { $lt: staleSendingCutoff } },
+      { $set: { status: 'failed', lastError: 'Sending was interrupted before completion. Retry this delivery.' } }
+    );
+
     const results = [];
     for (const recipient of template.recipients) {
+      const deliveryKey = { template: template._id, user: recipient._id };
       try {
+        try {
+          await CertificateDelivery.updateOne(deliveryKey, {
+            $setOnInsert: {
+              event: template.event._id,
+              recipientName: recipient.name,
+              recipientEmail: recipient.email,
+              status: 'pending',
+              attempts: 0,
+            },
+          }, { upsert: true });
+        } catch (error) {
+          if (error.code !== 11000) throw error;
+        }
+
+        const claimStatus = mode === 'retry' ? 'failed' : 'pending';
+        const delivery = await CertificateDelivery.findOneAndUpdate(
+          { ...deliveryKey, status: claimStatus },
+          {
+            $set: {
+              status: 'sending',
+              recipientName: recipient.name,
+              recipientEmail: recipient.email,
+              lastAttemptAt: new Date(),
+              lastError: '',
+            },
+            $inc: { attempts: 1 },
+          },
+          { new: true }
+        );
+        if (!delivery) {
+          const existing = await CertificateDelivery.findOne(deliveryKey).select('status lastError');
+          results.push({
+            email: recipient.email,
+            status: `skipped_${existing?.status || 'unknown'}`,
+            message: existing?.lastError || undefined,
+          });
+          continue;
+        }
+
         const pdfBuffer = await generateCertificateFromTemplate({
           name: recipient.name,
           imageBytes: template.image,
@@ -246,23 +294,63 @@ export async function sendUsingCertificateTemplate(req, res) {
           text: interpolateEmailText(template.emailBody || DEFAULT_EMAIL_BODY, variables),
           pdfBuffer,
         });
+        await CertificateDelivery.findByIdAndUpdate(delivery._id, {
+          $set: { status: 'sent', sentAt: new Date(), lastError: '' },
+        });
         results.push({ email: recipient.email, status: 'sent' });
       } catch (error) {
         console.error(`Failed to send certificate to ${recipient.email}:`, error);
+        await CertificateDelivery.findOneAndUpdate(deliveryKey, {
+          $set: { status: 'failed', lastError: String(error.message || 'Email delivery failed').slice(0, 2000) },
+        });
         results.push({ email: recipient.email, status: 'failed', message: error.message });
       }
     }
 
     const sent = results.filter((result) => result.status === 'sent').length;
-    const failed = results.length - sent;
-    return res.status(failed === results.length ? 502 : 200).json({
-      message: `Certificate sending complete: ${sent} sent, ${failed} failed.`,
+    const failed = results.filter((result) => result.status === 'failed').length;
+    const skipped = results.length - sent - failed;
+    return res.status(failed > 0 && sent === 0 && skipped === 0 ? 502 : 200).json({
+      message: mode === 'retry'
+        ? `Retry complete: ${sent} sent, ${failed} still failed, ${skipped} skipped.`
+        : `Certificate sending complete: ${sent} sent, ${failed} failed, ${skipped} already handled or in progress.`,
       sent,
       failed,
+      skipped,
       results,
     });
   } catch (error) {
     console.error('Failed to send certificates:', error);
     return res.status(500).json({ message: 'Failed to send certificates.' });
+  }
+}
+
+export async function sendUsingCertificateTemplate(req, res) {
+  return processCertificateDeliveries(req, res, 'send');
+}
+
+export async function retryFailedCertificateDeliveries(req, res) {
+  return processCertificateDeliveries(req, res, 'retry');
+}
+
+export async function listCertificateDeliveries(req, res) {
+  try {
+    const { templateId } = req.params;
+    if (!validId(templateId)) return res.status(400).json({ message: 'Invalid template ID.' });
+    const template = await CertificateTemplate.findById(templateId).select('_id');
+    if (!template) return res.status(404).json({ message: 'Certificate template not found.' });
+
+    const deliveries = await CertificateDelivery.find({ template: templateId })
+      .select('user recipientName recipientEmail status attempts lastAttemptAt sentAt lastError createdAt updatedAt')
+      .populate('user', 'name email')
+      .sort({ updatedAt: -1 });
+    const counts = deliveries.reduce((result, delivery) => {
+      result[delivery.status] = (result[delivery.status] || 0) + 1;
+      return result;
+    }, {});
+    return res.json({ deliveries, counts });
+  } catch (error) {
+    console.error('Failed to load certificate delivery history:', error);
+    return res.status(500).json({ message: 'Failed to load certificate delivery history.' });
   }
 }
