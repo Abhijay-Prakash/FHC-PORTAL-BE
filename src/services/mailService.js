@@ -76,6 +76,7 @@ Team FISAT HORIZON`,
     console.log(`Certificate email sent to ${to}`);
   } catch (err) {
     console.error(`Error sending certificate email to ${to}:`, err);
+    throw err;
   }
 }
 

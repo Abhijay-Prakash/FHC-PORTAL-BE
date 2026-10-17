@@ -75,7 +75,7 @@ export async function sendCertificateToAll(req,res) {
        
         results.push({email:user.email, status:'sent'});
       }catch(err){
-        console.error("Failed to send certificate to ${user.email}:",err);
+        console.error(`Failed to send certificate to ${user.email}:`, err);
         results.push({email:user.email, status:'Failed'});
       }
     }
