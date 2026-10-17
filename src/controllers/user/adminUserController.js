@@ -1,4 +1,8 @@
 import User,{SKILLS_ENUM} from '../../models/User.js';
+import mongoose from 'mongoose';
+import Event from '../../models/Event.js';
+import Project from '../../models/Project.js';
+import ByteRegistration from '../../models/ByteRegistration.js';
 
 
 
@@ -24,6 +28,73 @@ export const getAllAlumni = async (req, res) => {
   } catch (error) {
     console.error('Error fetching alumni:', error);
     res.status(500).json({ message: 'Server error while fetching alumni' });
+  }
+};
+
+export const updateUserProfile = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, phone, class: userClass, semester } = req.body;
+  const updates = {};
+
+  if (name !== undefined) {
+    if (typeof name !== 'string' || !name.trim() || name.trim().length > 100) {
+      return res.status(400).json({ message: 'Name must be between 1 and 100 characters.' });
+    }
+    updates.name = name.trim();
+  }
+
+  if (email !== undefined) {
+    if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      return res.status(400).json({ message: 'Enter a valid email address.' });
+    }
+    updates.email = email.trim().toLowerCase();
+  }
+
+  if (phone !== undefined) {
+    if (typeof phone !== 'string' || phone.trim().length > 30) {
+      return res.status(400).json({ message: 'Phone number must be 30 characters or fewer.' });
+    }
+    updates.phone = phone.trim();
+  }
+
+  if (userClass !== undefined) {
+    const allowedClasses = ['CSA', 'CSB', 'CSC', 'CSD', 'EC', 'EI', 'EE', 'ME', 'CE', 'IMCA'];
+    if (!allowedClasses.includes(userClass)) {
+      return res.status(400).json({ message: 'Select a valid class.' });
+    }
+    updates.class = userClass;
+  }
+
+  if (semester !== undefined) {
+    const semesterNumber = Number(semester);
+    if (!Number.isInteger(semesterNumber) || semesterNumber < 1 || semesterNumber > 8) {
+      return res.status(400).json({ message: 'Semester must be a whole number from 1 to 8.' });
+    }
+    updates.semester = semesterNumber;
+  }
+
+  if (!Object.keys(updates).length) {
+    return res.status(400).json({ message: 'Provide at least one profile field to update.' });
+  }
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { $set: updates },
+      { new: true, runValidators: true }
+    ).select('name email phone class role profilePic createdAt semester tags isAlumni passoutYear');
+
+    if (!updatedUser) return res.status(404).json({ message: 'User not found.' });
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    if (error.code === 11000 && error.keyPattern?.email) {
+      return res.status(409).json({ message: 'That email address is already in use.' });
+    }
+    if (error.name === 'CastError' || error.name === 'ValidationError') {
+      return res.status(400).json({ message: 'The profile details are invalid.' });
+    }
+    console.error('Error updating user profile:', error);
+    return res.status(500).json({ message: 'Server error while updating user profile.' });
   }
 };
 
@@ -69,7 +140,7 @@ export const changeRole = async(req,res) =>{
   const {id} = req.params;
   const {newRole} = req.body;
 
-  if (!['admin', 'execom', 'member'].includes(newRole)) {
+  if (!['participant', 'member', 'execom', 'admin'].includes(newRole)) {
     return res.status(400).json({ message: 'Invalid role' });
   }
 
@@ -82,6 +153,77 @@ export const changeRole = async(req,res) =>{
     res.status(500).json({ message: 'Error updating role', error: err });
   }
 
+};
+
+export const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  const session = await mongoose.startSession();
+
+  try {
+    let deletedUser;
+    let deletedProjects = 0;
+    let deletedByteRegistrations = 0;
+    let removedEventRegistrations = 0;
+
+    await session.withTransaction(async () => {
+      const user = await User.findById(id).select('_id role name').session(session);
+      if (!user) {
+        const error = new Error('User not found.');
+        error.statusCode = 404;
+        throw error;
+      }
+      if (user._id.equals(req.user._id)) {
+        const error = new Error('You cannot delete your own admin account.');
+        error.statusCode = 400;
+        throw error;
+      }
+      if (user.role === 'admin' && await User.countDocuments({ role: 'admin' }).session(session) <= 1) {
+        const error = new Error('The last admin account cannot be deleted.');
+        error.statusCode = 409;
+        throw error;
+      }
+
+      const registrationEvents = await Event.find({ registeredUsers: user._id }).select('_id').session(session);
+      removedEventRegistrations = registrationEvents.length;
+      await Event.updateMany(
+        { registeredUsers: user._id },
+        { $pull: { registeredUsers: user._id, attendedUsers: user._id }, $inc: { attendees: -1 } },
+        { session }
+      );
+      await Event.updateMany(
+        { attendedUsers: user._id },
+        { $pull: { attendedUsers: user._id } },
+        { session }
+      );
+
+      const ownedProjects = await Project.deleteMany({ owner: user._id }, { session });
+      deletedProjects = ownedProjects.deletedCount;
+      const byteRegistrations = await ByteRegistration.deleteMany({ user: user._id }, { session });
+      deletedByteRegistrations = byteRegistrations.deletedCount;
+      await Project.updateMany(
+        { $or: [{ teamMembers: user._id }, { 'joinRequests.user': user._id }] },
+        { $pull: { teamMembers: user._id, joinRequests: { user: user._id } } },
+        { session }
+      );
+      await User.deleteOne({ _id: user._id }, { session });
+      deletedUser = user;
+    });
+
+    return res.status(200).json({
+      message: `Deleted ${deletedUser.name}.`,
+      id: deletedUser._id,
+      deletedProjects,
+      deletedByteRegistrations,
+      removedEventRegistrations,
+    });
+  } catch (error) {
+    if (error.statusCode) return res.status(error.statusCode).json({ message: error.message });
+    if (error.name === 'CastError') return res.status(400).json({ message: 'Invalid user ID.' });
+    console.error('Error deleting user:', error);
+    return res.status(500).json({ message: 'Server error while deleting user.' });
+  } finally {
+    await session.endSession();
+  }
 };
 
 
