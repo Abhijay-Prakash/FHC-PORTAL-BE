@@ -45,26 +45,18 @@ Looking forward to seeing you at ${eventName}!
 
 
 
-export async function sendCertificateEmail({ to, name, eventName,date,  pdfBuffer }) {
+export async function sendCertificateEmail({ to, name, eventName, event, date, pdfBuffer, subject, text }) {
+  const certificateEventName = eventName || event || 'the event';
+  const defaultText = `Hi ${name},\n\nYour enthusiastic participation added great value to ${certificateEventName}. Please find your certificate attached.\n\nWarm regards,\nTeam FISAT HORIZON`;
   const mailOptions = {
     from: `"FISAT HORIZON" <${process.env.EMAIL_USER}>`,
     to,
-    subject: `Your Certificate for Participating  in EXODEX`,
-    text: `Hi ${name},\n\n
-Your enthusiastic participation and active involvement added great value to the event and contributed to its overall success. We truly appreciate your interest, energy, and willingness to engage in the experience.
-
-Please find your Certificate of Participation attached to this email.
-
-Keep exploring, keep building, and keep pushing your limits!
-
-We look forward to seeing you in our upcoming initiatives.
-
-Warm regards,
-Team FISAT HORIZON`,
+    subject: subject || `Your Certificate for Participating in ${certificateEventName}`,
+    text: text || defaultText,
 
     attachments: [
       {
-        filename: `${name}-Workshop_Certificate.pdf`,
+        filename: `${name}-Certificate.pdf`,
         content: pdfBuffer,
         contentType: 'application/pdf',
       },
